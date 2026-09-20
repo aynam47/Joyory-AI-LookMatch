@@ -12,6 +12,7 @@ export interface Product {
   coverage?: string;
   skin_types?: string[];
   features?: string[];
+  key_ingredients?: string[];
   image: string;
   originalPrice?: number;
 }

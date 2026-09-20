@@ -65,6 +65,13 @@ def match_products(attributes: AIAttributes) -> List[MatchResult]:
             if match_features:
                 score += 5.0
                 reasons.append(f"Similar features")
+
+        # Ingredients: 10%
+        if attributes.key_ingredients and product.key_ingredients:
+            match_ingredients = set(i.lower() for i in attributes.key_ingredients).intersection(set(i.lower() for i in product.key_ingredients))
+            for ingredient in match_ingredients:
+                score += 10.0
+                reasons.append(f"Matches ingredient: {ingredient.title()}")
         
         # Only consider products with a positive score
         if score > 0:

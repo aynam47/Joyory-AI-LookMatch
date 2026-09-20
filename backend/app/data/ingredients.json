@@ -1,0 +1,45 @@
+{
+  "skincare": [
+    "Hyaluronic Acid",
+    "Niacinamide",
+    "Vitamin C",
+    "Retinol",
+    "Ceramides",
+    "Salicylic Acid (BHA)",
+    "Glycolic Acid (AHA)",
+    "Peptides",
+    "Squalane",
+    "Centella Asiatica"
+  ],
+  "makeup": {
+    "foundation": [
+      "Hyaluronic Acid",
+      "Vitamin E",
+      "SPF",
+      "Squalane"
+    ],
+    "lipstick": [
+      "Shea Butter",
+      "Vitamin E",
+      "Jojoba Oil",
+      "Beeswax"
+    ],
+    "lip_gloss": [
+      "Peppermint Oil",
+      "Hyaluronic Acid",
+      "Shea Butter"
+    ],
+    "general": [
+      "Talc",
+      "Mica",
+      "Dimethicone"
+    ]
+  },
+  "haircare": [
+    "Argan Oil",
+    "Keratin",
+    "Biotin",
+    "Coconut Oil",
+    "Panthenol"
+  ]
+}

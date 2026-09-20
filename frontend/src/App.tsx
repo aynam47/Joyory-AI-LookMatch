@@ -1235,7 +1235,11 @@ export default function App() {
   }
 
   const scrollToLookMatch = () => {
-    document.getElementById('lookmatch')?.scrollIntoView({ behavior: 'smooth' })
+    if (window.location.pathname !== '/') {
+      window.location.href = '/#lookmatch'
+    } else {
+      document.getElementById('lookmatch')?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   const HomePage = () => (

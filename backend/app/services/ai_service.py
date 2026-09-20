@@ -15,6 +15,7 @@ class ExtractAttributesOutput(BaseModel):
     texture: Optional[str]
     coverage: Optional[str]
     features: Optional[List[str]]
+    key_ingredients: Optional[List[str]]
     budget: Optional[float]
 
 def get_client():
@@ -29,6 +30,7 @@ def extract_attributes_from_text(text: str) -> dict:
     You are an expert beauty consultant. Analyze the following user input and extract the relevant beauty product attributes.
     If the user mentions a budget, extract the maximum amount as a number.
     If the user mentions a reference product (e.g. MAC Ruby Woo), infer its category, shade, finish, undertone, etc.
+    Extract any key ingredients the user explicitly asks for, or infer typical key ingredients if they mention a reference product.
     
     User Input: "{text}"
     """
@@ -48,6 +50,7 @@ def extract_attributes_from_image(image_bytes: bytes, mime_type: str) -> dict:
     prompt = """
     You are an expert beauty consultant. Analyze the provided image of a beauty product.
     Identify its category, subcategory, color family, shade, undertone, finish, texture, and coverage based on visual evidence.
+    Also identify any key ingredients shown on the packaging or infer common key ingredients for this specific product.
     If exact product is not clear, deduce the generic visual characteristics.
     """
     

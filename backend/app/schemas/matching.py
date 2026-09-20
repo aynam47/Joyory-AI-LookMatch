@@ -12,6 +12,7 @@ class AIAttributes(BaseModel):
     texture: Optional[str] = None
     coverage: Optional[str] = None
     features: Optional[List[str]] = []
+    key_ingredients: Optional[List[str]] = []
     budget: Optional[float] = None
 
 class MatchResult(BaseModel):

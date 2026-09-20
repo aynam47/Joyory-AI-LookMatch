@@ -13,6 +13,7 @@
       "coverage": "full",
       "skin_types": ["all"],
       "features": ["long lasting"],
+      "key_ingredients": ["Vitamin E", "Shea Butter"],
       "image": "https://placehold.co/400x400/ffe4e1/333333?text=Rose+Matte+Lip+Color"
     },
     {
@@ -29,6 +30,7 @@
       "coverage": "full",
       "skin_types": ["all"],
       "features": ["hydrating", "vegan"],
+      "key_ingredients": ["Jojoba Oil", "Vitamin E"],
       "image": "https://placehold.co/400x400/ffb6c1/333333?text=Velvet+Crimson"
     },
     {
@@ -45,6 +47,7 @@
       "coverage": "sheer",
       "skin_types": ["all"],
       "features": ["plumping"],
+      "key_ingredients": ["Peppermint Oil", "Hyaluronic Acid"],
       "image": "https://placehold.co/400x400/dda0dd/333333?text=Sheer+Plum"
     },
     {
@@ -61,6 +64,7 @@
       "coverage": "medium",
       "skin_types": ["dry", "normal"],
       "features": ["spf 30", "lightweight"],
+      "key_ingredients": ["Hyaluronic Acid", "Squalane"],
       "image": "https://placehold.co/400x400/f5deb3/333333?text=Flawless+Base"
     },
     {
@@ -77,6 +81,7 @@
       "coverage": "full",
       "skin_types": ["oily", "combination"],
       "features": ["oil control", "24h wear"],
+      "key_ingredients": ["Salicylic Acid (BHA)", "Niacinamide"],
       "image": "https://placehold.co/400x400/deb887/333333?text=Matte+Perfect"
     },
     {
@@ -93,6 +98,7 @@
       "coverage": "buildable",
       "skin_types": ["all"],
       "features": ["cruelty-free"],
+      "key_ingredients": ["Mica", "Vitamin E"],
       "image": "https://placehold.co/400x400/ffdab9/333333?text=Peachy+Glow"
     },
     {
@@ -109,6 +115,7 @@
       "coverage": "full",
       "skin_types": ["all"],
       "features": ["waterproof", "lengthening"],
+      "key_ingredients": ["Panthenol", "Beeswax"],
       "image": "https://placehold.co/400x400/2f4f4f/ffffff?text=Volumizing+Mascara"
     },
     {
@@ -125,6 +132,7 @@
       "coverage": "opaque",
       "skin_types": ["all"],
       "features": ["smudge-proof"],
+      "key_ingredients": ["Vitamin E", "Carbon Black"],
       "image": "https://placehold.co/400x400/000000/ffffff?text=Precision+Eyeliner"
     },
     {
@@ -141,6 +149,7 @@
       "coverage": "sheer",
       "skin_types": ["dry", "sensitive"],
       "features": ["hyaluronic acid", "fragrance-free"],
+      "key_ingredients": ["Hyaluronic Acid", "Ceramides"],
       "image": "https://placehold.co/400x400/e0ffff/333333?text=Hydration+Serum"
     },
     {
@@ -157,6 +166,7 @@
       "coverage": "sheer",
       "skin_types": ["all"],
       "features": ["spf 50", "no white cast"],
+      "key_ingredients": ["Zinc Oxide", "Niacinamide"],
       "image": "https://placehold.co/400x400/fffacd/333333?text=Daily+Defense+SPF"
     }
 ]

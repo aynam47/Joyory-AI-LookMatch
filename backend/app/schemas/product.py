@@ -15,4 +15,5 @@ class Product(BaseModel):
     coverage: Optional[str] = None
     skin_types: Optional[List[str]] = []
     features: Optional[List[str]] = []
+    key_ingredients: Optional[List[str]] = []
     image: str
