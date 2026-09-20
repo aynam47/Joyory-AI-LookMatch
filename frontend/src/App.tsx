@@ -317,96 +317,152 @@ function ProductCard({ product, matchScore, matchReasons, onAddToCart }: {
 }
 
 // ── AI LookMatch Section ───────────────────────────────────────────────────
+type Message = {
+  id: string
+  sender: 'ai' | 'user'
+  text?: string
+  image?: string // Object URL
+  results?: any[]
+  attributes?: any
+}
+
 function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
-  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
-  const [textInput, setTextInput] = useState('')
-  const [textError, setTextError] = useState('')
-  const [searched, setSearched] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'welcome',
+      sender: 'ai',
+      text: 'Hi! What beauty product are you looking for? You can describe a look, upload an image, or use the microphone to talk to me.'
+    }
+  ])
+  const [input, setInput] = useState('')
+  const [isListening, setIsListening] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<'chips' | 'text' | 'image'>('chips')
-  const [matchedResults, setMatchedResults] = useState<any[]>([])
-  const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [detectedAttributes, setDetectedAttributes] = useState<any | null>(null)
+  const [error, setError] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const chatEndRef = useRef<HTMLDivElement>(null)
+  const originalInputRef = useRef('')
 
-  const toggleFeature = (feat: string) => {
-    setSelectedFeatures(prev =>
-      prev.includes(feat) ? prev.filter(f => f !== feat) : [...prev, feat]
-    )
-    setSearched(false)
+  // Auto-scroll to bottom of chat
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading])
+
+  const handleVoice = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setError("Voice input isn't available in this browser. You can type your request instead.")
+      return
+    }
+
+    if (isListening) return; // Prevent multiple instances
+
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'en-US'
+    recognition.interimResults = true
+
+    recognition.onstart = () => {
+      setIsListening(true)
+      setError('')
+      originalInputRef.current = input // Capture existing input before voice session starts
+    }
+
+    recognition.onresult = (event: any) => {
+      let finalTranscript = ''
+      let interimTranscript = ''
+      
+      for (let i = 0; i < event.results.length; i++) {
+        const transcriptChunk = event.results[i][0].transcript
+        if (event.results[i].isFinal) {
+          finalTranscript += transcriptChunk
+        } else {
+          interimTranscript += transcriptChunk
+        }
+      }
+      
+      const newText = originalInputRef.current 
+        ? `${originalInputRef.current} ${finalTranscript}${interimTranscript}`
+        : `${finalTranscript}${interimTranscript}`
+        
+      setInput(newText.trim())
+    }
+
+    recognition.onerror = (event: any) => {
+      setIsListening(false)
+      if (event.error === 'not-allowed') {
+        setError("Microphone permission denied.")
+      } else if (event.error === 'no-speech') {
+        setError("No speech detected. Please try again.")
+      } else {
+        setError("Couldn't hear that. Please try again.")
+      }
+    }
+
+    recognition.onend = () => {
+      setIsListening(false)
+    }
+
+    recognition.start()
   }
 
-  const clearAll = () => {
-    setSelectedFeatures([])
-    setTextInput('')
-    setTextError('')
-    setSearched(false)
-    setMatchedResults([])
-    setSelectedImage(null)
-    setImagePreview(null)
-    setDetectedAttributes(null)
-  }
-
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    
-    setTextError('')
-    setSearched(false)
-    setDetectedAttributes(null)
-    
+
+    setError('')
+
     if (!file.type.startsWith('image/')) {
-      setTextError('Please upload a valid JPG, PNG, or WEBP image.')
+      setError('Please upload a valid JPG, PNG, or WEBP image.')
       return
     }
-    
+
     if (file.size > 5 * 1024 * 1024) {
-      setTextError('Image size should be less than 5MB.')
+      setError('Image size should be less than 5MB.')
       return
     }
-    
-    setSelectedImage(file)
-    setImagePreview(URL.createObjectURL(file))
+
+    // Reset input
+    if (fileInputRef.current) fileInputRef.current.value = ''
+
+    await processInput(undefined, file)
   }
 
-  const handleMatch = async () => {
-    if (activeTab === 'chips' && selectedFeatures.length === 0) return
-    if (activeTab === 'text' && !textInput.trim()) {
-      setTextError('Please enter a description.')
-      return
-    }
-    if (activeTab === 'image' && !selectedImage) {
-      setTextError('Please select an image first.')
-      return
+  const handleSendText = () => {
+    if (!input.trim() || loading) return
+    processInput(input.trim())
+  }
+
+  const processInput = async (textMsg?: string, imageFile?: File) => {
+    const userMsg: Message = {
+      id: Date.now().toString(),
+      sender: 'user',
+      text: textMsg,
+      image: imageFile ? URL.createObjectURL(imageFile) : undefined
     }
 
+    setMessages(prev => [...prev, userMsg])
+    if (textMsg) setInput('')
     setLoading(true)
-    setTextError('')
-    setSearched(false)
-    setDetectedAttributes(null)
-    
+    setError('')
+
     try {
       let attributes = {}
-      if (activeTab === 'text') {
-        const res = await fetch('/api/ai/product-name', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: textInput })
-        })
-        if (!res.ok) throw new Error('Failed to analyze text')
-        attributes = await res.json()
-      } else if (activeTab === 'image') {
+      if (imageFile) {
         const formData = new FormData()
-        formData.append("file", selectedImage!)
+        formData.append("file", imageFile)
         const res = await fetch('/api/ai/image', {
           method: 'POST',
           body: formData
         })
-        if (!res.ok) throw new Error('Couldn\'t analyze this image. Try a clearer product image.')
+        if (!res.ok) throw new Error("Couldn't analyze this image. Try a clearer product image.")
         attributes = await res.json()
-        setDetectedAttributes(attributes)
-      } else {
-        attributes = { features: selectedFeatures }
+      } else if (textMsg) {
+        const res = await fetch('/api/ai/product-name', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: textMsg })
+        })
+        if (!res.ok) throw new Error('Failed to analyze text.')
+        attributes = await res.json()
       }
 
       const matchRes = await fetch('/api/match', {
@@ -414,14 +470,25 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(attributes)
       })
-      if (!matchRes.ok) throw new Error('Failed to find matches')
       
+      if (!matchRes.ok) throw new Error('Failed to find matches.')
       const data = await matchRes.json()
-      setMatchedResults(data.matches || [])
-      setSearched(true)
-    } catch (err) {
+
+      const aiMsg: Message = {
+        id: Date.now().toString() + '-ai',
+        sender: 'ai',
+        text: data.matches && data.matches.length > 0 
+          ? "I found these closest matches for you:" 
+          : "I couldn't find an exact match for those criteria.",
+        results: data.matches || [],
+        attributes: imageFile ? attributes : undefined
+      }
+
+      setMessages(prev => [...prev, aiMsg])
+
+    } catch (err: any) {
       console.error(err)
-      setTextError('Something went wrong finding matches. Ensure the backend is running.')
+      setError(err.message || 'Something went wrong finding matches. Ensure the backend is running.')
     } finally {
       setLoading(false)
     }
@@ -429,285 +496,175 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
 
   return (
     <section id="lookmatch" className="py-20 bg-[#2c2225]">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
+      <div className="max-w-4xl mx-auto px-4 md:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-[#c9707a]/20 text-[#f7e8e8] text-xs font-semibold px-4 py-2 rounded-full mb-4 uppercase tracking-widest">
             <svg className="w-3.5 h-3.5 text-[#c9a96e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
-            Joyory AI LookMatch™
+            Joyory AI Beauty Assistant
           </div>
           <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-[#fdf8f4] mb-4">
-            Match by <em className="text-[#c9707a] not-italic">Look or Features</em>
+            Chat with <em className="text-[#c9707a] not-italic">Joyory AI</em>
           </h2>
           <p className="text-[#9a8287] text-lg max-w-xl mx-auto">
-            Select the features you want or describe your desired look in natural language. Our AI instantly surfaces every product matching your requirements.
+            Describe what you need, use your voice, or upload a photo to find the perfect beauty products instantly.
           </p>
         </div>
 
-        {/* Ingredient Selector */}
-        <div className="bg-[#3a2e31] rounded-3xl p-6 md:p-10 mb-8">
-
-          {/* Tab switcher */}
-          <div className="flex items-center gap-1 bg-[#2c2225] p-1 rounded-full w-fit mb-7">
-            {(['chips', 'text', 'image'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => { setActiveTab(tab); setTextError('') }}
-                className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 ${
-                  activeTab === tab ? 'bg-[#c9707a] text-white' : 'text-[#9a8287] hover:text-[#f7e8e8]'
-                }`}
-              >
-                {tab === 'chips' ? (
-                  <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Quick Select</>
-                ) : tab === 'text' ? (
-                  <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Describe Look</>
-                ) : (
-                  <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Upload Image</>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* ── Quick Select chips ── */}
-          {activeTab === 'chips' && (
-            <>
-              <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[#f7e8e8] font-semibold text-sm">Select your features</h3>
-                {selectedFeatures.length > 0 && (
-                  <button onClick={clearAll} className="text-xs text-[#9a8287] hover:text-[#c9707a] transition-colors">
-                    Clear all
-                  </button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-2.5">
-                {ALL_FEATURES.map(feat => {
-                  const active = selectedFeatures.includes(feat)
-                  return (
-                    <button
-                      key={feat}
-                      onClick={() => toggleFeature(feat)}
-                      className={`px-3.5 py-2 rounded-full text-xs font-medium border transition-all duration-200 ${
-                        active
-                          ? 'bg-[#c9707a] border-[#c9707a] text-white scale-105'
-                          : 'bg-transparent border-[#5a4a4e] text-[#9a8287] hover:border-[#c9707a] hover:text-[#c9707a]'
-                      }`}
-                    >
-                      {active && <span className="mr-1">✓</span>}{feat}
-                    </button>
-                  )
-                })}
-              </div>
-            </>
-          )}
-
-          {/* ── Text input ── */}
-          {activeTab === 'text' && (
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-[#f7e8e8] font-semibold text-sm">Describe what you are looking for</h3>
-                {textInput && (
-                  <button onClick={clearAll} className="text-xs text-[#9a8287] hover:text-[#c9707a] transition-colors">
-                    Clear all
-                  </button>
-                )}
-              </div>
-
-              <p className="text-[#9a8287] text-xs mb-3">
-                Tell us about your skin type, desired finish, or specific needs — e.g. <span className="text-[#c9a96e]">I want a matte lipstick that is long lasting</span>
-              </p>
-
-              <div className="relative">
-                <textarea
-                  value={textInput}
-                  onChange={e => { setTextInput(e.target.value); setTextError('') }}
-                  onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleMatch() }}
-                  placeholder="Describe your desired product..."
-                  rows={5}
-                  className="w-full bg-[#2c2225] text-[#f7e8e8] placeholder:text-[#5a4a4e] text-sm px-5 py-4 rounded-2xl border border-[#5a4a4e] focus:outline-none focus:border-[#c9707a] resize-none leading-relaxed transition-colors duration-200"
-                />
-              </div>
-
-              {/* Error message */}
-              {textError && (
-                <div className="mt-3 flex items-start gap-2 bg-[#c9707a]/10 border border-[#c9707a]/30 rounded-xl px-4 py-3">
-                  <svg className="w-4 h-4 text-[#c9707a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  <p className="text-[#c9707a] text-xs leading-relaxed">{textError}</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ── Image upload ── */}
-          {activeTab === 'image' && (
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-[#f7e8e8] font-semibold text-sm">Upload Product Image</h3>
-                {selectedImage && (
-                  <button onClick={clearAll} className="text-xs text-[#9a8287] hover:text-[#c9707a] transition-colors">
-                    Remove Image
-                  </button>
-                )}
-              </div>
-
-              {!selectedImage ? (
-                <div className="relative border-2 border-dashed border-[#5a4a4e] hover:border-[#c9707a] rounded-2xl p-10 text-center transition-colors">
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    onChange={handleImageSelect}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <div className="w-12 h-12 bg-[#2c2225] rounded-full flex items-center justify-center mx-auto mb-4 text-[#9a8287]">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                    </svg>
-                  </div>
-                  <p className="text-[#f7e8e8] text-sm font-medium mb-1">Click or drag image to upload</p>
-                  <p className="text-[#9a8287] text-xs">Supported formats: JPG, PNG, WEBP</p>
-                </div>
-              ) : (
-                <div className="flex flex-col sm:flex-row gap-6 items-start bg-[#2c2225] p-4 rounded-2xl border border-[#5a4a4e]">
-                  <div className="w-full sm:w-40 h-40 flex-shrink-0 bg-black rounded-xl overflow-hidden relative group">
-                    {imagePreview && (
-                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+        {/* Chat Interface */}
+        <div className="bg-[#3a2e31] rounded-3xl overflow-hidden border border-[#5a4a4e] flex flex-col h-[700px] shadow-2xl">
+          
+          {/* Chat History */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            {messages.map(msg => (
+              <div key={msg.id} className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                
+                {/* Text Bubble */}
+                {(msg.text || msg.image) && (
+                  <div className={`max-w-[85%] rounded-2xl px-5 py-3 ${
+                    msg.sender === 'user' 
+                      ? 'bg-[#c9707a] text-white rounded-br-none' 
+                      : 'bg-[#2c2225] text-[#f7e8e8] border border-[#5a4a4e] rounded-bl-none'
+                  }`}>
+                    {msg.image && (
+                      <img src={msg.image} alt="User upload" className="w-48 h-48 object-cover rounded-xl mb-2 bg-black" />
                     )}
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <button onClick={clearAll} className="text-white text-xs font-medium bg-[#c9707a] px-3 py-1.5 rounded-full">
-                        Remove
-                      </button>
+                    {msg.text && <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>}
+                  </div>
+                )}
+
+                {/* Detected Attributes (for images) */}
+                {msg.attributes && (
+                  <div className="mt-3 bg-[#2c2225] border border-[#5a4a4e] rounded-xl p-4 max-w-[85%]">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#c9a96e] mb-2">Detected Image Characteristics</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {Object.entries(msg.attributes).map(([key, value]) => {
+                        if (!value || key === 'budget' || (Array.isArray(value) && value.length === 0)) return null;
+                        return (
+                          <div key={key}>
+                            <p className="text-[9px] text-[#9a8287] uppercase">{key.replace('_', ' ')}</p>
+                            <p className="text-[11px] text-[#f7e8e8] font-medium capitalize truncate">
+                              {Array.isArray(value) ? value.join(', ') : String(value)}
+                            </p>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-[#f7e8e8] text-sm font-medium mb-1 truncate" title={selectedImage.name}>{selectedImage.name}</p>
-                    <p className="text-[#9a8287] text-xs mb-4">{(selectedImage.size / 1024 / 1024).toFixed(2)} MB</p>
-                    
-                    {detectedAttributes && (
-                      <div className="bg-[#3a2e31] rounded-xl p-4 border border-[#5a4a4e]">
-                        <h4 className="text-[#f7e8e8] text-xs font-semibold uppercase tracking-widest mb-3 text-[#c9a96e]">Detected Characteristics</h4>
-                        <div className="grid grid-cols-2 gap-y-2 gap-x-4">
-                          {Object.entries(detectedAttributes).map(([key, value]) => {
-                            if (!value || key === 'budget' || (Array.isArray(value) && value.length === 0)) return null;
-                            return (
-                              <div key={key}>
-                                <p className="text-[10px] text-[#9a8287] uppercase">{key.replace('_', ' ')}</p>
-                                <p className="text-xs text-[#f7e8e8] font-medium capitalize">
-                                  {Array.isArray(value) ? value.join(', ') : String(value)}
-                                </p>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
+                )}
+
+                {/* Product Results */}
+                {msg.results && msg.results.length > 0 && (
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                    {msg.results.map((match: any) => (
+                      <ProductCard
+                        key={match.id}
+                        product={match}
+                        matchScore={Math.round(match.score)}
+                        matchReasons={match.reasons}
+                        onAddToCart={onAddToCart}
+                      />
+                    ))}
                   </div>
-                </div>
-              )}
-
-              {/* Error message */}
-              {textError && (
-                <div className="mt-3 flex items-start gap-2 bg-[#c9707a]/10 border border-[#c9707a]/30 rounded-xl px-4 py-3">
-                  <svg className="w-4 h-4 text-[#c9707a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  <p className="text-[#c9707a] text-xs leading-relaxed">{textError}</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Selected pills summary (always visible when something is selected) */}
-          {activeTab === 'chips' && selectedFeatures.length > 0 && (
-            <div className="mt-7 pt-6 border-t border-[#5a4a4e]">
-              <p className="text-[#9a8287] text-xs mb-3 uppercase tracking-widest font-semibold">
-                {selectedFeatures.length} feature{selectedFeatures.length > 1 ? 's' : ''} queued for matching
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {selectedFeatures.map(feat => (
-                  <span key={feat} className="flex items-center gap-1.5 bg-[#c9707a]/20 text-[#f7e8e8] text-xs px-3 py-1.5 rounded-full">
-                    {feat}
-                    <button
-                      onClick={() => { setSelectedFeatures(prev => prev.filter(f => f !== feat)); setSearched(false) }}
-                      className="text-[#c9707a] hover:text-white transition-colors leading-none"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
+                )}
               </div>
-            </div>
-          )}
-
-          {/* CTA row */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 mt-6 border-t border-[#5a4a4e]">
-            <p className="text-[#9a8287] text-sm">
-              {activeTab === 'chips' && selectedFeatures.length === 0
-                ? 'No features selected yet'
-                : activeTab === 'text' && !textInput
-                ? 'Describe your look above'
-                : activeTab === 'image' && !selectedImage
-                ? 'Upload a product image'
-                : <span>Ready to match!</span>
-              }
-            </p>
-            <button
-              onClick={handleMatch}
-              disabled={(activeTab === 'chips' && selectedFeatures.length === 0) || (activeTab === 'text' && !textInput) || (activeTab === 'image' && !selectedImage) || loading}
-              className="flex items-center gap-2 bg-[#c9707a] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-8 py-3 rounded-full hover:bg-[#a84f59] transition-colors duration-200 text-sm"
-            >
-              {loading ? (
-                <>
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            ))}
+            
+            {loading && (
+              <div className="flex items-start">
+                <div className="bg-[#2c2225] text-[#9a8287] border border-[#5a4a4e] rounded-2xl rounded-bl-none px-5 py-3 flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin text-[#c9707a]" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                   </svg>
-                  {activeTab === 'image' && !detectedAttributes ? 'Analyzing Image…' : 'Matching…'}
-                </>
-              ) : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  {activeTab === 'image' ? 'Analyze & Match' : 'Find My Matches'}
-                </>
+                  <span className="text-sm">Thinking...</span>
+                </div>
+              </div>
+            )}
+            
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Error Banner */}
+          {error && (
+            <div className="bg-[#c9707a]/20 border-t border-[#c9707a]/30 px-6 py-2 flex items-center gap-2">
+               <svg className="w-4 h-4 text-[#c9707a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+               </svg>
+               <p className="text-[#c9707a] text-xs">{error}</p>
+            </div>
+          )}
+
+          {/* Chat Input */}
+          <div className="bg-[#2c2225] border-t border-[#5a4a4e] p-4 flex items-end gap-3">
+            
+            {/* Hidden File Input */}
+            <input 
+              type="file" 
+              accept="image/jpeg,image/png,image/webp" 
+              ref={fileInputRef} 
+              onChange={handleImageSelect}
+              className="hidden" 
+            />
+            
+            <button 
+              onClick={() => fileInputRef.current?.click()}
+              disabled={loading}
+              className="p-3 text-[#9a8287] hover:text-[#c9707a] hover:bg-[#3a2e31] rounded-full transition-colors disabled:opacity-50"
+              title="Upload Product Image"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </button>
+
+            <div className="flex-1 bg-[#3a2e31] border border-[#5a4a4e] rounded-2xl flex items-center focus-within:border-[#c9707a] transition-colors relative overflow-hidden">
+              <input
+                type="text"
+                value={input}
+                onChange={e => { setInput(e.target.value); setError('') }}
+                onKeyDown={e => { if (e.key === 'Enter') handleSendText() }}
+                placeholder="Type your beauty request..."
+                disabled={loading}
+                className="w-full bg-transparent text-[#f7e8e8] placeholder:text-[#5a4a4e] text-sm px-4 py-4 focus:outline-none disabled:opacity-50"
+              />
+              
+              {isListening && (
+                <div className="absolute right-12 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                  <span className="text-red-400 text-xs font-semibold mr-2">Listening...</span>
+                </div>
               )}
+
+              <button
+                onClick={handleVoice}
+                disabled={loading}
+                className={`p-3 mx-1 rounded-full transition-colors ${
+                  isListening ? 'text-red-400 bg-red-400/10' : 'text-[#9a8287] hover:text-[#c9707a] hover:bg-[#2c2225]'
+                } disabled:opacity-50`}
+                title="Use Voice"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                </svg>
+              </button>
+            </div>
+
+            <button
+              onClick={handleSendText}
+              disabled={!input.trim() || loading}
+              className="p-4 bg-[#c9707a] text-white rounded-2xl hover:bg-[#a84f59] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+              title="Send"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
             </button>
           </div>
         </div>
 
-        {/* Results */}
-        {searched && (
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <h3 className="text-[#f7e8e8] font-['Playfair_Display'] text-2xl font-bold">
-                {matchedResults.length > 0 ? `${matchedResults.length} products matched` : 'No matches found'}
-              </h3>
-              {matchedResults.length > 0 && <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"/>}
-            </div>
-
-            {matchedResults.length === 0 ? (
-              <div className="text-center py-12 text-[#9a8287]">
-                <p className="text-4xl mb-4">🔍</p>
-                <p>We couldn't find an exact match for those criteria. Try different features.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {matchedResults.map((match: any) => (
-                  <ProductCard
-                    key={match.id}
-                    product={match}
-                    matchScore={Math.round(match.score)}
-                    matchReasons={match.reasons}
-                    onAddToCart={onAddToCart}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </section>
   )

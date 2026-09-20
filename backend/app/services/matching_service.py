@@ -15,26 +15,27 @@ def match_products(attributes: AIAttributes) -> List[MatchResult]:
     products = load_products()
     results = []
 
+    # 1. Category Constraint
+    if attributes.category:
+        target_category = attributes.category.lower().strip()
+        products = [p for p in products if p.category.lower().strip() == target_category]
+
     for product in products:
         score = 0.0
         reasons = []
 
-        # Budget Check (Hard filter or small penalty if strict)
-        # Requirements state: "Only recommend products at or below ₹700 when possible."
-        # "If there are no products within budget: Tell the user: No exact matches were found within your budget. Here are the closest alternatives."
-        # We will handle budget by adding a large score boost if within budget, or filtering later.
+        # Category: 30%
+        if attributes.category and product.category.lower().strip() == attributes.category.lower().strip():
+            score += 30.0
+            reasons.append(f"Same category ({product.category})")
+
+        # Budget Scoring (Fallback penalty/bonus)
         if attributes.budget:
             if product.price <= attributes.budget:
                 score += 5.0
                 reasons.append("Within budget")
             else:
-                # Slight penalty to deprioritize but not exclude
                 score -= 2.0
-
-        # Category: 30%
-        if attributes.category and product.category.lower() == attributes.category.lower():
-            score += 30.0
-            reasons.append(f"Same category ({product.category})")
 
         # Shade/Color: 25%
         if attributes.color_family and product.color_family and attributes.color_family.lower() == product.color_family.lower():
@@ -89,4 +90,15 @@ def match_products(attributes: AIAttributes) -> List[MatchResult]:
 
     # Sort by score descending
     results.sort(key=lambda x: x.score, reverse=True)
+
+    # Budget Filtering
+    if attributes.budget:
+        budget_results = [r for r in results if r.price <= attributes.budget]
+        if budget_results:
+            results = budget_results
+        else:
+            # Fallback if no items are within budget
+            for r in results:
+                r.reasons.append("Exceeds budget")
+                
     return results[:3]
