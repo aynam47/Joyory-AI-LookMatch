@@ -7,108 +7,22 @@ interface Product {
   brand: string
   category: string
   price: number
-  originalPrice?: number
-  rating: number
-  reviews: number
+  shade?: string
+  color_family?: string
+  undertone?: string
+  finish?: string
+  texture?: string
+  coverage?: string
+  skin_types?: string[]
+  features?: string[]
   image: string
-  ingredients: string[]
-  tags: string[]
-  badge?: string
 }
 
 // ── Mock Data ──────────────────────────────────────────────────────────────
-const ALL_INGREDIENTS = [
-  'Hyaluronic Acid', 'Niacinamide', 'Retinol', 'Vitamin C', 'Vitamin E',
-  'Ceramides', 'Peptides', 'Glycerin', 'Salicylic Acid', 'AHA/BHA',
-  'Collagen', 'Squalane', 'Aloe Vera', 'Rose Extract', 'Centella Asiatica',
-  'Bakuchiol', 'Tranexamic Acid', 'Zinc', 'Caffeine', 'Green Tea Extract',
-]
-
-const PRODUCTS: Product[] = [
-  {
-    id: 1, name: 'Glow Surge Moisturizer', brand: 'Luminara', category: 'Skincare',
-    price: 2199, originalPrice: 2799, rating: 4.8, reviews: 1243,
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Hyaluronic Acid', 'Ceramides', 'Glycerin', 'Niacinamide', 'Aloe Vera'],
-    tags: ['Moisturizer', 'Hydrating'], badge: 'Bestseller',
-  },
-  {
-    id: 2, name: 'Vitamin C Brightening Serum', brand: 'Radiance Lab', category: 'Skincare',
-    price: 1899, rating: 4.7, reviews: 987,
-    image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Vitamin C', 'Vitamin E', 'Niacinamide', 'Hyaluronic Acid', 'Green Tea Extract'],
-    tags: ['Serum', 'Brightening'], badge: 'New',
-  },
-  {
-    id: 3, name: 'Retinol Renewal Night Cream', brand: 'Ageless Co.', category: 'Skincare',
-    price: 3299, originalPrice: 3899, rating: 4.6, reviews: 742,
-    image: 'https://images.unsplash.com/photo-1619451334792-150fd785ee74?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Retinol', 'Peptides', 'Ceramides', 'Squalane', 'Bakuchiol'],
-    tags: ['Anti-aging', 'Night Cream'],
-  },
-  {
-    id: 4, name: 'Pore Perfecting Toner', brand: 'ClearSkin', category: 'Skincare',
-    price: 999, rating: 4.5, reviews: 621,
-    image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Salicylic Acid', 'AHA/BHA', 'Niacinamide', 'Zinc', 'Aloe Vera'],
-    tags: ['Toner', 'Pore Care'], badge: 'Fan Fave',
-  },
-  {
-    id: 5, name: 'Rose Petal Essence Mist', brand: 'Fleur Beauty', category: 'Skincare',
-    price: 1499, rating: 4.9, reviews: 2105,
-    image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Rose Extract', 'Hyaluronic Acid', 'Glycerin', 'Aloe Vera', 'Centella Asiatica'],
-    tags: ['Mist', 'Hydrating'], badge: 'Bestseller',
-  },
-  {
-    id: 6, name: 'Peptide Firming Eye Cream', brand: 'Youth Lab', category: 'Skincare',
-    price: 2599, originalPrice: 2999, rating: 4.6, reviews: 534,
-    image: 'https://images.unsplash.com/photo-1601049676869-702ea24cfd58?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Peptides', 'Caffeine', 'Collagen', 'Vitamin E', 'Hyaluronic Acid'],
-    tags: ['Eye Cream', 'Firming'],
-  },
-  {
-    id: 7, name: 'Even Tone Brightening Mask', brand: 'Glow Studio', category: 'Skincare',
-    price: 1299, rating: 4.7, reviews: 876,
-    image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Tranexamic Acid', 'Niacinamide', 'Vitamin C', 'Centella Asiatica', 'Glycerin'],
-    tags: ['Mask', 'Brightening'], badge: 'New',
-  },
-  {
-    id: 8, name: 'Squalane Barrier Repair Oil', brand: 'Dew Drops', category: 'Skincare',
-    price: 1799, rating: 4.8, reviews: 1089,
-    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Squalane', 'Ceramides', 'Bakuchiol', 'Vitamin E', 'Rose Extract'],
-    tags: ['Face Oil', 'Barrier Repair'],
-  },
-  {
-    id: 9, name: 'Collagen Boost Day Cream', brand: 'Plump & Glow', category: 'Skincare',
-    price: 2899, originalPrice: 3299, rating: 4.5, reviews: 462,
-    image: 'https://images.unsplash.com/photo-1614159869575-4604ab4f3a2a?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Collagen', 'Peptides', 'Hyaluronic Acid', 'Vitamin C', 'Green Tea Extract'],
-    tags: ['Day Cream', 'Anti-aging'],
-  },
-  {
-    id: 10, name: 'Centella Calm Repair Serum', brand: 'Seoul Glow', category: 'Skincare',
-    price: 1599, rating: 4.9, reviews: 1672,
-    image: 'https://images.unsplash.com/photo-1585184394271-4c0a47dc59c9?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Centella Asiatica', 'Aloe Vera', 'Niacinamide', 'Ceramides', 'Glycerin'],
-    tags: ['Serum', 'Soothing'], badge: 'Bestseller',
-  },
-  {
-    id: 11, name: 'Matte Velvet Lip Colour', brand: 'Luxe Lip', category: 'Makeup',
-    price: 799, rating: 4.6, reviews: 1934,
-    image: 'https://images.unsplash.com/photo-1586495777744-4e6232bf2f9a?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Vitamin E', 'Aloe Vera', 'Squalane'],
-    tags: ['Lipstick', 'Matte'],
-  },
-  {
-    id: 12, name: 'Dewy Skin Foundation SPF 30', brand: 'Base Society', category: 'Makeup',
-    price: 2299, originalPrice: 2699, rating: 4.7, reviews: 2341,
-    image: 'https://images.unsplash.com/photo-1631214524020-3c69888b8f4a?w=400&h=400&fit=crop&auto=format',
-    ingredients: ['Hyaluronic Acid', 'Niacinamide', 'Glycerin', 'Zinc'],
-    tags: ['Foundation', 'Dewy Finish'], badge: 'Fan Fave',
-  },
+const ALL_FEATURES = [
+  'long lasting', 'hydrating', 'vegan', 'plumping', 'lightweight',
+  'oil control', '24h wear', 'cruelty-free', 'waterproof', 'lengthening',
+  'smudge-proof', 'hyaluronic acid', 'fragrance-free', 'spf 50', 'no white cast'
 ]
 
 const CATEGORIES = [
@@ -317,10 +231,10 @@ function Categories() {
 }
 
 // ── Product Card ───────────────────────────────────────────────────────────
-function ProductCard({ product, matchScore, matchedIngredients, onAddToCart }: {
-  product: Product
+function ProductCard({ product, matchScore, matchReasons, onAddToCart }: {
+  product: Pick<Product, 'id'|'name'|'brand'|'price'|'image'|'features'|'shade'|'finish'> | Product
   matchScore?: number
-  matchedIngredients?: string[]
+  matchReasons?: string[]
   onAddToCart: (id: number) => void
 }) {
   const [wishlist, setWishlist] = useState(false)
@@ -356,21 +270,28 @@ function ProductCard({ product, matchScore, matchedIngredients, onAddToCart }: {
         <p className="text-[10px] font-semibold tracking-widest uppercase text-[#c9a96e] mb-1">{product.brand}</p>
         <h3 className="font-['Playfair_Display'] font-semibold text-sm text-[#2c2225] mb-2 line-clamp-2">{product.name}</h3>
 
-        <div className="flex items-center gap-1.5 mb-2">
-          <StarRating rating={product.rating}/>
-          <span className="text-xs text-[#9a8287]">({product.reviews.toLocaleString()})</span>
+        <div className="flex items-center gap-1.5 mb-2 text-xs text-[#9a8287]">
+          {product.shade && <span>Shade: {product.shade}</span>}
+          {product.finish && <span>• {product.finish}</span>}
         </div>
 
-        {matchedIngredients && matchedIngredients.length > 0 && (
+        {matchReasons && matchReasons.length > 0 && (
           <div className="mb-3">
-            <p className="text-[10px] text-[#9a8287] mb-1.5">Matched ingredients:</p>
-            <div className="flex flex-wrap gap-1">
-              {matchedIngredients.slice(0, 3).map(ing => (
-                <span key={ing} className="text-[9px] bg-[#f7e8e8] text-[#c9707a] px-1.5 py-0.5 rounded-full font-medium">{ing}</span>
+            <p className="text-[10px] text-[#9a8287] mb-1.5">Why it matches:</p>
+            <div className="flex flex-col gap-1">
+              {matchReasons.slice(0, 3).map((reason, idx) => (
+                <span key={idx} className="text-[9px] bg-[#f7e8e8] text-[#c9707a] px-1.5 py-0.5 rounded-sm font-medium">{reason}</span>
               ))}
-              {matchedIngredients.length > 3 && (
-                <span className="text-[9px] bg-[#f7e8e8] text-[#9a8287] px-1.5 py-0.5 rounded-full">+{matchedIngredients.length - 3}</span>
-              )}
+            </div>
+          </div>
+        )}
+
+        {!matchReasons && product.features && product.features.length > 0 && (
+          <div className="mb-3">
+            <div className="flex flex-wrap gap-1">
+              {product.features.slice(0, 3).map(feat => (
+                <span key={feat} className="text-[9px] bg-[#f7e8e8] text-[#9a8287] px-1.5 py-0.5 rounded-full">{feat}</span>
+              ))}
             </div>
           </div>
         )}
@@ -395,87 +316,71 @@ function ProductCard({ product, matchScore, matchedIngredients, onAddToCart }: {
 
 // ── AI LookMatch Section ───────────────────────────────────────────────────
 function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([])
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
   const [textInput, setTextInput] = useState('')
   const [textError, setTextError] = useState('')
-  const [unrecognized, setUnrecognized] = useState<string[]>([])
   const [searched, setSearched] = useState(false)
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<'chips' | 'text'>('chips')
+  const [matchedResults, setMatchedResults] = useState<any[]>([])
 
-  const toggleIngredient = (ing: string) => {
-    setSelectedIngredients(prev =>
-      prev.includes(ing) ? prev.filter(i => i !== ing) : [...prev, ing]
+  const toggleFeature = (feat: string) => {
+    setSelectedFeatures(prev =>
+      prev.includes(feat) ? prev.filter(f => f !== feat) : [...prev, feat]
     )
     setSearched(false)
   }
 
-  const parseTextInput = () => {
-    const raw = textInput
-      .split(/[\n,;]+/)
-      .map(s => s.trim())
-      .filter(Boolean)
-
-    if (raw.length === 0) {
-      setTextError('Please enter at least one ingredient.')
-      return
-    }
-
-    const matched: string[] = []
-    const unknown: string[] = []
-
-    raw.forEach(entry => {
-      const found = ALL_INGREDIENTS.find(
-        ing => ing.toLowerCase() === entry.toLowerCase()
-      )
-      if (found) {
-        if (!matched.includes(found)) matched.push(found)
-      } else {
-        unknown.push(entry)
-      }
-    })
-
-    if (matched.length === 0) {
-      setTextError('None of the entered ingredients were recognised. Try names like "Retinol", "Niacinamide", or "Vitamin C".')
-      setUnrecognized(unknown)
-      return
-    }
-
-    setTextError('')
-    setUnrecognized(unknown)
-    setSelectedIngredients(prev => {
-      const merged = [...prev]
-      matched.forEach(m => { if (!merged.includes(m)) merged.push(m) })
-      return merged
-    })
-    setSearched(false)
-  }
-
-  const handleMatch = () => {
-    if (selectedIngredients.length === 0) return
-    setLoading(true)
-    setTimeout(() => { setLoading(false); setSearched(true) }, 1200)
-  }
-
   const clearAll = () => {
-    setSelectedIngredients([])
+    setSelectedFeatures([])
     setTextInput('')
     setTextError('')
-    setUnrecognized([])
     setSearched(false)
+    setMatchedResults([])
   }
 
-  const matchedProducts = useMemo(() => {
-    if (!searched || selectedIngredients.length === 0) return []
-    return PRODUCTS
-      .map(p => {
-        const matched = p.ingredients.filter(i => selectedIngredients.includes(i))
-        const score = Math.round((matched.length / selectedIngredients.length) * 100)
-        return { product: p, score, matched }
+  const handleMatch = async () => {
+    if (activeTab === 'chips' && selectedFeatures.length === 0) return
+    if (activeTab === 'text' && !textInput.trim()) {
+      setTextError('Please enter a description.')
+      return
+    }
+
+    setLoading(true)
+    setTextError('')
+    setSearched(false)
+    
+    try {
+      let attributes = {}
+      if (activeTab === 'text') {
+        const res = await fetch('/api/ai/product-name', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: textInput })
+        })
+        if (!res.ok) throw new Error('Failed to analyze text')
+        attributes = await res.json()
+      } else {
+        attributes = { features: selectedFeatures }
+      }
+
+      const matchRes = await fetch('/api/match', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(attributes)
       })
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score)
-  }, [searched, selectedIngredients])
+      if (!matchRes.ok) throw new Error('Failed to find matches')
+      
+      const data = await matchRes.json()
+      setMatchedResults(data.matches || [])
+      setSearched(true)
+    } catch (err) {
+      console.error(err)
+      setTextError('Something went wrong finding matches. Ensure the backend is running.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <section id="lookmatch" className="py-20 bg-[#2c2225]">
@@ -489,10 +394,10 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
             Joyory AI LookMatch™
           </div>
           <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-[#fdf8f4] mb-4">
-            Match by <em className="text-[#c9707a] not-italic">Ingredients</em>
+            Match by <em className="text-[#c9707a] not-italic">Look or Features</em>
           </h2>
           <p className="text-[#9a8287] text-lg max-w-xl mx-auto">
-            Select or type the ingredients that matter to your skin. Our AI instantly surfaces every product containing your chosen actives.
+            Select the features you want or describe your desired look in natural language. Our AI instantly surfaces every product matching your requirements.
           </p>
         </div>
 
@@ -504,7 +409,7 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
             {(['chips', 'text'] as const).map(tab => (
               <button
                 key={tab}
-                onClick={() => { setActiveTab(tab); setTextError(''); setUnrecognized([]) }}
+                onClick={() => { setActiveTab(tab); setTextError('') }}
                 className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 ${
                   activeTab === tab ? 'bg-[#c9707a] text-white' : 'text-[#9a8287] hover:text-[#f7e8e8]'
                 }`}
@@ -512,7 +417,7 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
                 {tab === 'chips' ? (
                   <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Quick Select</>
                 ) : (
-                  <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Type Ingredients</>
+                  <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Describe Look</>
                 )}
               </button>
             ))}
@@ -522,27 +427,27 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
           {activeTab === 'chips' && (
             <>
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[#f7e8e8] font-semibold text-sm">Select your ingredients</h3>
-                {selectedIngredients.length > 0 && (
+                <h3 className="text-[#f7e8e8] font-semibold text-sm">Select your features</h3>
+                {selectedFeatures.length > 0 && (
                   <button onClick={clearAll} className="text-xs text-[#9a8287] hover:text-[#c9707a] transition-colors">
                     Clear all
                   </button>
                 )}
               </div>
               <div className="flex flex-wrap gap-2.5">
-                {ALL_INGREDIENTS.map(ing => {
-                  const active = selectedIngredients.includes(ing)
+                {ALL_FEATURES.map(feat => {
+                  const active = selectedFeatures.includes(feat)
                   return (
                     <button
-                      key={ing}
-                      onClick={() => toggleIngredient(ing)}
+                      key={feat}
+                      onClick={() => toggleFeature(feat)}
                       className={`px-3.5 py-2 rounded-full text-xs font-medium border transition-all duration-200 ${
                         active
                           ? 'bg-[#c9707a] border-[#c9707a] text-white scale-105'
                           : 'bg-transparent border-[#5a4a4e] text-[#9a8287] hover:border-[#c9707a] hover:text-[#c9707a]'
                       }`}
                     >
-                      {active && <span className="mr-1">✓</span>}{ing}
+                      {active && <span className="mr-1">✓</span>}{feat}
                     </button>
                   )
                 })}
@@ -554,8 +459,8 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
           {activeTab === 'text' && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-[#f7e8e8] font-semibold text-sm">Type your ingredients</h3>
-                {(textInput || selectedIngredients.length > 0) && (
+                <h3 className="text-[#f7e8e8] font-semibold text-sm">Describe what you are looking for</h3>
+                {textInput && (
                   <button onClick={clearAll} className="text-xs text-[#9a8287] hover:text-[#c9707a] transition-colors">
                     Clear all
                   </button>
@@ -563,21 +468,18 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
               </div>
 
               <p className="text-[#9a8287] text-xs mb-3">
-                Separate ingredients with commas, semicolons, or new lines — e.g. <span className="text-[#c9a96e]">Retinol, Niacinamide, Vitamin C</span>
+                Tell us about your skin type, desired finish, or specific needs — e.g. <span className="text-[#c9a96e]">I want a matte lipstick that is long lasting</span>
               </p>
 
               <div className="relative">
                 <textarea
                   value={textInput}
-                  onChange={e => { setTextInput(e.target.value); setTextError(''); setUnrecognized([]) }}
-                  onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) parseTextInput() }}
-                  placeholder={`e.g.\nHyaluronic Acid\nRetinol\nNiacinamide, Vitamin C`}
+                  onChange={e => { setTextInput(e.target.value); setTextError('') }}
+                  onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleMatch() }}
+                  placeholder="Describe your desired product..."
                   rows={5}
                   className="w-full bg-[#2c2225] text-[#f7e8e8] placeholder:text-[#5a4a4e] text-sm px-5 py-4 rounded-2xl border border-[#5a4a4e] focus:outline-none focus:border-[#c9707a] resize-none leading-relaxed transition-colors duration-200"
                 />
-                <span className="absolute bottom-3 right-4 text-[10px] text-[#5a4a4e]">
-                  {textInput.split(/[\n,;]+/).filter(s => s.trim()).length} entered
-                </span>
               </div>
 
               {/* Error message */}
@@ -589,44 +491,21 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
                   <p className="text-[#c9707a] text-xs leading-relaxed">{textError}</p>
                 </div>
               )}
-
-              {/* Unrecognised warning */}
-              {unrecognized.length > 0 && !textError && (
-                <div className="mt-3 flex items-start gap-2 bg-[#c9a96e]/10 border border-[#c9a96e]/30 rounded-xl px-4 py-3">
-                  <svg className="w-4 h-4 text-[#c9a96e] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  <p className="text-[#c9a96e] text-xs leading-relaxed">
-                    Skipped unrecognised: <strong>{unrecognized.join(', ')}</strong>. Matched entries were added below.
-                  </p>
-                </div>
-              )}
-
-              <button
-                onClick={parseTextInput}
-                disabled={!textInput.trim()}
-                className="mt-4 flex items-center gap-2 bg-[#f7e8e8] disabled:opacity-40 disabled:cursor-not-allowed text-[#2c2225] font-semibold px-6 py-2.5 rounded-full hover:bg-white transition-colors duration-200 text-xs"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
-                </svg>
-                Add to selection
-              </button>
             </div>
           )}
 
           {/* Selected pills summary (always visible when something is selected) */}
-          {selectedIngredients.length > 0 && (
+          {activeTab === 'chips' && selectedFeatures.length > 0 && (
             <div className="mt-7 pt-6 border-t border-[#5a4a4e]">
               <p className="text-[#9a8287] text-xs mb-3 uppercase tracking-widest font-semibold">
-                {selectedIngredients.length} ingredient{selectedIngredients.length > 1 ? 's' : ''} queued for matching
+                {selectedFeatures.length} feature{selectedFeatures.length > 1 ? 's' : ''} queued for matching
               </p>
               <div className="flex flex-wrap gap-2">
-                {selectedIngredients.map(ing => (
-                  <span key={ing} className="flex items-center gap-1.5 bg-[#c9707a]/20 text-[#f7e8e8] text-xs px-3 py-1.5 rounded-full">
-                    {ing}
+                {selectedFeatures.map(feat => (
+                  <span key={feat} className="flex items-center gap-1.5 bg-[#c9707a]/20 text-[#f7e8e8] text-xs px-3 py-1.5 rounded-full">
+                    {feat}
                     <button
-                      onClick={() => { setSelectedIngredients(prev => prev.filter(i => i !== ing)); setSearched(false) }}
+                      onClick={() => { setSelectedFeatures(prev => prev.filter(f => f !== feat)); setSearched(false) }}
                       className="text-[#c9707a] hover:text-white transition-colors leading-none"
                     >
                       ×
@@ -640,14 +519,16 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
           {/* CTA row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 mt-6 border-t border-[#5a4a4e]">
             <p className="text-[#9a8287] text-sm">
-              {selectedIngredients.length === 0
-                ? 'No ingredients selected yet'
-                : <span>Ready to match <strong className="text-[#f7e8e8]">{selectedIngredients.length}</strong> ingredient{selectedIngredients.length > 1 ? 's' : ''}</span>
+              {activeTab === 'chips' && selectedFeatures.length === 0
+                ? 'No features selected yet'
+                : activeTab === 'text' && !textInput
+                ? 'Describe your look above'
+                : <span>Ready to match!</span>
               }
             </p>
             <button
               onClick={handleMatch}
-              disabled={selectedIngredients.length === 0 || loading}
+              disabled={(activeTab === 'chips' && selectedFeatures.length === 0) || (activeTab === 'text' && !textInput) || loading}
               className="flex items-center gap-2 bg-[#c9707a] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-8 py-3 rounded-full hover:bg-[#a84f59] transition-colors duration-200 text-sm"
             >
               {loading ? (
@@ -675,24 +556,24 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <h3 className="text-[#f7e8e8] font-['Playfair_Display'] text-2xl font-bold">
-                {matchedProducts.length > 0 ? `${matchedProducts.length} products matched` : 'No matches found'}
+                {matchedResults.length > 0 ? `${matchedResults.length} products matched` : 'No matches found'}
               </h3>
-              {matchedProducts.length > 0 && <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"/>}
+              {matchedResults.length > 0 && <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"/>}
             </div>
 
-            {matchedProducts.length === 0 ? (
+            {matchedResults.length === 0 ? (
               <div className="text-center py-12 text-[#9a8287]">
                 <p className="text-4xl mb-4">🔍</p>
-                <p>Try different ingredient combinations to find your matches.</p>
+                <p>We couldn't find an exact match for those criteria. Try different features.</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {matchedProducts.map(({ product, score, matched }) => (
+                {matchedResults.map((match: any) => (
                   <ProductCard
-                    key={product.id}
-                    product={product}
-                    matchScore={score}
-                    matchedIngredients={matched}
+                    key={match.id}
+                    product={match}
+                    matchScore={Math.round(match.score)}
+                    matchReasons={match.reasons}
                     onAddToCart={onAddToCart}
                   />
                 ))}
@@ -706,11 +587,15 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
 }
 
 // ── Featured Products ──────────────────────────────────────────────────────
-function FeaturedProducts({ onAddToCart }: { onAddToCart: (id: number) => void }) {
+function FeaturedProducts({ products, onAddToCart }: { products: Product[]; onAddToCart: (id: number) => void }) {
   const [activeTab, setActiveTab] = useState('All')
-  const tabs = ['All', 'Skincare', 'Makeup']
+  
+  // Extract unique categories dynamically, capitalize first letter
+  const uniqueCategories = Array.from(new Set(products.map(p => p.category)))
+    .map(c => c.charAt(0).toUpperCase() + c.slice(1))
+  const tabs = ['All', ...uniqueCategories]
 
-  const filtered = activeTab === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.category === activeTab)
+  const filtered = activeTab === 'All' ? products : products.filter(p => p.category.toLowerCase() === activeTab.toLowerCase())
 
   return (
     <section id="products" className="py-20 bg-[#fdf8f4]">
@@ -1207,6 +1092,14 @@ function VoiceChat() {
 export default function App() {
   const [cartCount, setCartCount] = useState(0)
   const [showToast, setShowToast] = useState(false)
+  const [products, setProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error('Failed to load products:', err))
+  }, [])
 
   const addToCart = (_id: number) => {
     setCartCount(c => c + 1)
@@ -1223,7 +1116,7 @@ export default function App() {
       <Navbar cartCount={cartCount} onAiClick={scrollToLookMatch}/>
       <Hero onAiClick={scrollToLookMatch}/>
       <Categories/>
-      <FeaturedProducts onAddToCart={addToCart}/>
+      <FeaturedProducts products={products} onAddToCart={addToCart}/>
       <HowItWorks onAiClick={scrollToLookMatch}/>
       <AILookMatch onAddToCart={addToCart}/>
       <PromoBanner/>
