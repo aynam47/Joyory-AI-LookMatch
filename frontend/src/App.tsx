@@ -323,8 +323,11 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
   const [textError, setTextError] = useState('')
   const [searched, setSearched] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<'chips' | 'text'>('chips')
+  const [activeTab, setActiveTab] = useState<'chips' | 'text' | 'image'>('chips')
   const [matchedResults, setMatchedResults] = useState<any[]>([])
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [detectedAttributes, setDetectedAttributes] = useState<any | null>(null)
 
   const toggleFeature = (feat: string) => {
     setSelectedFeatures(prev =>
@@ -339,6 +342,31 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
     setTextError('')
     setSearched(false)
     setMatchedResults([])
+    setSelectedImage(null)
+    setImagePreview(null)
+    setDetectedAttributes(null)
+  }
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    
+    setTextError('')
+    setSearched(false)
+    setDetectedAttributes(null)
+    
+    if (!file.type.startsWith('image/')) {
+      setTextError('Please upload a valid JPG, PNG, or WEBP image.')
+      return
+    }
+    
+    if (file.size > 5 * 1024 * 1024) {
+      setTextError('Image size should be less than 5MB.')
+      return
+    }
+    
+    setSelectedImage(file)
+    setImagePreview(URL.createObjectURL(file))
   }
 
   const handleMatch = async () => {
@@ -347,10 +375,15 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
       setTextError('Please enter a description.')
       return
     }
+    if (activeTab === 'image' && !selectedImage) {
+      setTextError('Please select an image first.')
+      return
+    }
 
     setLoading(true)
     setTextError('')
     setSearched(false)
+    setDetectedAttributes(null)
     
     try {
       let attributes = {}
@@ -362,6 +395,16 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
         })
         if (!res.ok) throw new Error('Failed to analyze text')
         attributes = await res.json()
+      } else if (activeTab === 'image') {
+        const formData = new FormData()
+        formData.append("file", selectedImage!)
+        const res = await fetch('/api/ai/image', {
+          method: 'POST',
+          body: formData
+        })
+        if (!res.ok) throw new Error('Couldn\'t analyze this image. Try a clearer product image.')
+        attributes = await res.json()
+        setDetectedAttributes(attributes)
       } else {
         attributes = { features: selectedFeatures }
       }
@@ -408,7 +451,7 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
 
           {/* Tab switcher */}
           <div className="flex items-center gap-1 bg-[#2c2225] p-1 rounded-full w-fit mb-7">
-            {(['chips', 'text'] as const).map(tab => (
+            {(['chips', 'text', 'image'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => { setActiveTab(tab); setTextError('') }}
@@ -418,8 +461,10 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
               >
                 {tab === 'chips' ? (
                   <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Quick Select</>
-                ) : (
+                ) : tab === 'text' ? (
                   <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Describe Look</>
+                ) : (
+                  <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Upload Image</>
                 )}
               </button>
             ))}
@@ -496,6 +541,84 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
             </div>
           )}
 
+          {/* ── Image upload ── */}
+          {activeTab === 'image' && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-[#f7e8e8] font-semibold text-sm">Upload Product Image</h3>
+                {selectedImage && (
+                  <button onClick={clearAll} className="text-xs text-[#9a8287] hover:text-[#c9707a] transition-colors">
+                    Remove Image
+                  </button>
+                )}
+              </div>
+
+              {!selectedImage ? (
+                <div className="relative border-2 border-dashed border-[#5a4a4e] hover:border-[#c9707a] rounded-2xl p-10 text-center transition-colors">
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleImageSelect}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="w-12 h-12 bg-[#2c2225] rounded-full flex items-center justify-center mx-auto mb-4 text-[#9a8287]">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                  </div>
+                  <p className="text-[#f7e8e8] text-sm font-medium mb-1">Click or drag image to upload</p>
+                  <p className="text-[#9a8287] text-xs">Supported formats: JPG, PNG, WEBP</p>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-6 items-start bg-[#2c2225] p-4 rounded-2xl border border-[#5a4a4e]">
+                  <div className="w-full sm:w-40 h-40 flex-shrink-0 bg-black rounded-xl overflow-hidden relative group">
+                    {imagePreview && (
+                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    )}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button onClick={clearAll} className="text-white text-xs font-medium bg-[#c9707a] px-3 py-1.5 rounded-full">
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[#f7e8e8] text-sm font-medium mb-1 truncate" title={selectedImage.name}>{selectedImage.name}</p>
+                    <p className="text-[#9a8287] text-xs mb-4">{(selectedImage.size / 1024 / 1024).toFixed(2)} MB</p>
+                    
+                    {detectedAttributes && (
+                      <div className="bg-[#3a2e31] rounded-xl p-4 border border-[#5a4a4e]">
+                        <h4 className="text-[#f7e8e8] text-xs font-semibold uppercase tracking-widest mb-3 text-[#c9a96e]">Detected Characteristics</h4>
+                        <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+                          {Object.entries(detectedAttributes).map(([key, value]) => {
+                            if (!value || key === 'budget' || (Array.isArray(value) && value.length === 0)) return null;
+                            return (
+                              <div key={key}>
+                                <p className="text-[10px] text-[#9a8287] uppercase">{key.replace('_', ' ')}</p>
+                                <p className="text-xs text-[#f7e8e8] font-medium capitalize">
+                                  {Array.isArray(value) ? value.join(', ') : String(value)}
+                                </p>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Error message */}
+              {textError && (
+                <div className="mt-3 flex items-start gap-2 bg-[#c9707a]/10 border border-[#c9707a]/30 rounded-xl px-4 py-3">
+                  <svg className="w-4 h-4 text-[#c9707a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <p className="text-[#c9707a] text-xs leading-relaxed">{textError}</p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Selected pills summary (always visible when something is selected) */}
           {activeTab === 'chips' && selectedFeatures.length > 0 && (
             <div className="mt-7 pt-6 border-t border-[#5a4a4e]">
@@ -525,12 +648,14 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
                 ? 'No features selected yet'
                 : activeTab === 'text' && !textInput
                 ? 'Describe your look above'
+                : activeTab === 'image' && !selectedImage
+                ? 'Upload a product image'
                 : <span>Ready to match!</span>
               }
             </p>
             <button
               onClick={handleMatch}
-              disabled={(activeTab === 'chips' && selectedFeatures.length === 0) || (activeTab === 'text' && !textInput) || loading}
+              disabled={(activeTab === 'chips' && selectedFeatures.length === 0) || (activeTab === 'text' && !textInput) || (activeTab === 'image' && !selectedImage) || loading}
               className="flex items-center gap-2 bg-[#c9707a] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-8 py-3 rounded-full hover:bg-[#a84f59] transition-colors duration-200 text-sm"
             >
               {loading ? (
@@ -539,14 +664,14 @@ function AILookMatch({ onAddToCart }: { onAddToCart: (id: number) => void }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                   </svg>
-                  Matching…
+                  {activeTab === 'image' && !detectedAttributes ? 'Analyzing Image…' : 'Matching…'}
                 </>
               ) : (
                 <>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
-                  Find My Matches
+                  {activeTab === 'image' ? 'Analyze & Match' : 'Find My Matches'}
                 </>
               )}
             </button>
