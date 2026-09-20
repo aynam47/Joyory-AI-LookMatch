@@ -42,17 +42,17 @@ Follow these instructions to run the Joyory AI LookMatch application locally.
    cd frontend
    ```
 
-2. **Serve the static files**:
-   You can use any static file server. For example, using Python's built-in HTTP server:
+2. **Install dependencies**:
    ```bash
-   python -m http.server 3000
-   ```
-   Or using Node.js `http-server`:
-   ```bash
-   npx http-server -p 3000
+   npm install
    ```
 
-3. **Open the app**:
-   Navigate to `http://localhost:3000` in your web browser.
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+   
+4. **Open the app**:
+   Navigate to the URL provided by Vite (usually `http://localhost:5173`) in your web browser.
 
-**Note**: Ensure the backend server is running, as the frontend makes requests to `http://localhost:8000/api`.
+**Note**: Ensure the backend server is running concurrently. The frontend Vite configuration proxies `/api` requests directly to `http://localhost:8000`, so no manual CORS setup is required when running the development server.

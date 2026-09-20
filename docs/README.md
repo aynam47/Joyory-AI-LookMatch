@@ -5,7 +5,7 @@ Welcome to the documentation for **Joyory AI LookMatch**, an AI-powered beauty m
 ## Architecture
 
 The project consists of two main parts:
-- **Frontend**: A static HTML/CSS/JavaScript web application.
+- **Frontend**: A React application built with Vite and TypeScript, featuring dynamic AI look-matching UI.
 - **Backend**: A FastAPI Python application serving the API and AI analysis endpoints.
 
 ## Documentation Structure
