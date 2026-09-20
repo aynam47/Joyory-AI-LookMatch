@@ -1,0 +1,10 @@
+{
+  "description": "Matches product ingredients to suggest similar items, helping users find alternatives easily on a responsive, user-friendly platform.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
