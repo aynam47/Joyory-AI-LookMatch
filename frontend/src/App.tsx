@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
+import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom'
+import CategoryPage from './pages/CategoryPage'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Product {
@@ -73,9 +75,9 @@ function Navbar({ cartCount, onAiClick }: { cartCount: number; onAiClick: () => 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map(l => (
-              <a key={l} href="#" className="text-sm font-medium text-[#2c2225]/70 hover:text-[#c9707a] transition-colors duration-200">
+              <Link key={l} to={`/${l.toLowerCase()}`} className="text-sm font-medium text-[#2c2225]/70 hover:text-[#c9707a] transition-colors duration-200">
                 {l}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -121,7 +123,7 @@ function Navbar({ cartCount, onAiClick }: { cartCount: number; onAiClick: () => 
         {menuOpen && (
           <div className="md:hidden border-t border-[#e8d8d8] bg-[#fdf8f4] px-4 py-4 flex flex-col gap-4">
             {navLinks.map(l => (
-              <a key={l} href="#" className="text-sm font-medium text-[#2c2225]/70 hover:text-[#c9707a]">{l}</a>
+              <Link key={l} to={`/${l.toLowerCase()}`} className="text-sm font-medium text-[#2c2225]/70 hover:text-[#c9707a]" onClick={() => setMenuOpen(false)}>{l}</Link>
             ))}
             <button onClick={onAiClick} className="flex items-center gap-1.5 bg-[#c9707a] text-white text-xs font-semibold px-3 py-2 rounded-full w-fit">
               ✨ AI LookMatch
@@ -1111,9 +1113,8 @@ export default function App() {
     document.getElementById('lookmatch')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  return (
-    <div className="min-h-screen">
-      <Navbar cartCount={cartCount} onAiClick={scrollToLookMatch}/>
+  const HomePage = () => (
+    <>
       <Hero onAiClick={scrollToLookMatch}/>
       <Categories/>
       <FeaturedProducts products={products} onAddToCart={addToCart}/>
@@ -1121,9 +1122,27 @@ export default function App() {
       <AILookMatch onAddToCart={addToCart}/>
       <PromoBanner/>
       <Testimonials/>
+    </>
+  )
+
+  const Layout = () => (
+    <div className="min-h-screen">
+      <Navbar cartCount={cartCount} onAiClick={scrollToLookMatch}/>
+      <Outlet />
       <Footer/>
       <Toast show={showToast}/>
       <VoiceChat/>
     </div>
+  )
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/:categoryName" element={<CategoryPage onAddToCart={addToCart} />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
