@@ -2,19 +2,28 @@ import os
 import json
 import re
 import logging
+from pathlib import Path
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from pydantic import BaseModel
 from typing import Optional, List
 
+# Ensure backend .env is loaded
+_env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(dotenv_path=_env_path)
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 
 SUPPORTED_MODELS = [
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-flash-latest",
     "gemini-3.6-flash",
     "gemini-3.7-flash",
     "gemini-3.8-flash",
-    "gemini-3.5-flash",
-    "gemini-flash-latest",
 ]
 
 class ExtractAttributesOutput(BaseModel):
