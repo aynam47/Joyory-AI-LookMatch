@@ -6,5 +6,5 @@ router = APIRouter()
 
 @router.post("/match", response_model=MatchResponse)
 def get_matches(attributes: AIAttributes):
-    matches = match_products(attributes)
-    return MatchResponse(matches=matches)
+    matches = match_products(attributes, limit=5)
+    return MatchResponse(matches=matches, analyzed_product=attributes)
