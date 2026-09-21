@@ -1,5 +1,8 @@
 backend/venv/
-backend/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
 .env
 .pytest_cache/
 .DS_Store
+

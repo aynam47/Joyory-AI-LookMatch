@@ -341,8 +341,6 @@ function ProductCard({ product, matchScore, matchReasons, onAddToCart }: {
     </div>
   )
 }
-  )
-}
 
 // ── AI LookMatch Section ───────────────────────────────────────────────────
 type Message = {
