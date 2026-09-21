@@ -1,45 +1,122 @@
 {
-  "skincare": [
+  "Rose Matte Lip Color": [
+    "Vitamin E",
+    "Shea Butter"
+  ],
+  "Velvet Crimson Lipstick": [
+    "Jojoba Oil",
+    "Vitamin E"
+  ],
+  "Sheer Plum Gloss": [
+    "Peppermint Oil",
+    "Hyaluronic Acid"
+  ],
+  "Flawless Base Foundation": [
     "Hyaluronic Acid",
-    "Niacinamide",
-    "Vitamin C",
-    "Retinol",
-    "Ceramides",
+    "Squalane"
+  ],
+  "Matte Perfect Foundation": [
     "Salicylic Acid (BHA)",
-    "Glycolic Acid (AHA)",
-    "Peptides",
+    "Niacinamide"
+  ],
+  "Peachy Glow Blush": [
+    "Mica",
+    "Vitamin E"
+  ],
+  "Volumizing Mascara": [
+    "Panthenol",
+    "Beeswax"
+  ],
+  "Precision Liquid Eyeliner": [
+    "Vitamin E",
+    "Carbon Black"
+  ],
+  "Hydration Boost Serum": [
+    "Hyaluronic Acid",
+    "Ceramides"
+  ],
+  "Daily Defense Sunscreen": [
+    "Zinc Oxide",
+    "Niacinamide"
+  ],
+  "Nude Petal Matte Lipstick": [
+    "Shea Butter",
+    "Vitamin E",
+    "Jojoba Oil"
+  ],
+  "Dusty Rose Velvet Lip Crayon": [
+    "Shea Butter",
+    "Beeswax",
+    "Vitamin E"
+  ],
+  "Satin Touch Mauve Lipstick": [
+    "Jojoba Oil",
+    "Vitamin E",
+    "Hyaluronic Acid"
+  ],
+  "Bare Bliss Hydrating Lip Oil": [
+    "Jojoba Oil",
+    "Vitamin E",
+    "Shea Butter"
+  ],
+  "Glaze Bomb High-Shine Gloss": [
+    "Shea Butter",
+    "Hyaluronic Acid",
+    "Peppermint Oil"
+  ],
+  "Stay-All-Day Stay Matte Foundation": [
+    "Niacinamide",
+    "Salicylic Acid (BHA)",
+    "Dimethicone"
+  ],
+  "Radiant Silk Luminous Foundation": [
     "Squalane",
+    "Hyaluronic Acid",
+    "Vitamin E"
+  ],
+  "Skin-First Tinted Glow Serum": [
+    "Ceramides",
+    "Hyaluronic Acid",
+    "Squalane"
+  ],
+  "Radiant Coral Shimmer Blush": [
+    "Mica",
+    "Vitamin E",
+    "Dimethicone"
+  ],
+  "Pore-Clearing BHA Clarifying Serum": [
+    "Salicylic Acid (BHA)",
+    "Niacinamide",
     "Centella Asiatica"
   ],
-  "makeup": {
-    "foundation": [
-      "Hyaluronic Acid",
-      "Vitamin E",
-      "SPF",
-      "Squalane"
-    ],
-    "lipstick": [
-      "Shea Butter",
-      "Vitamin E",
-      "Jojoba Oil",
-      "Beeswax"
-    ],
-    "lip_gloss": [
-      "Peppermint Oil",
-      "Hyaluronic Acid",
-      "Shea Butter"
-    ],
-    "general": [
-      "Talc",
-      "Mica",
-      "Dimethicone"
-    ]
-  },
-  "haircare": [
-    "Argan Oil",
-    "Keratin",
-    "Biotin",
-    "Coconut Oil",
+  "10% Niacinamide + Zinc Balance Drops": [
+    "Niacinamide",
+    "Hyaluronic Acid",
     "Panthenol"
+  ],
+  "15% Vitamin C Glow Brightening Booster": [
+    "Vitamin C",
+    "Vitamin E",
+    "Hyaluronic Acid"
+  ],
+  "Multi-Peptide Youth Plumping Serum": [
+    "Peptides",
+    "Hyaluronic Acid",
+    "Ceramides"
+  ],
+  "Centella Barrier Relief Cream": [
+    "Centella Asiatica",
+    "Ceramides",
+    "Squalane"
+  ],
+  "Invisible Shield Matte Sunscreen SPF 50": [
+    "Dimethicone",
+    "Vitamin E",
+    "Niacinamide"
+  ],
+  "La Prairie Skin Caviar Concealer Foundation": [
+    "Caviar Extract",
+    "Peptides",
+    "Vitamin E"
   ]
 }

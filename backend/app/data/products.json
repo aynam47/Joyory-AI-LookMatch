@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Rose Matte Lip Color",
     "brand": "Example Beauty",
-    "category": "lipstick",
+    "category": "Makeup",
     "price": 499,
     "shade": "deep red",
     "color_family": "red",
@@ -11,16 +11,24 @@
     "finish": "matte",
     "texture": "creamy",
     "coverage": "full",
-    "skin_types": ["all"],
-    "features": ["long lasting"],
-    "key_ingredients": ["Vitamin E", "Shea Butter"],
-    "image": "https://placehold.co/400x400/ffe4e1/333333?text=Rose+Matte+Lip+Color"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "long lasting"
+    ],
+    "key_ingredients": [
+      "Vitamin E",
+      "Shea Butter"
+    ],
+    "image": "https://placehold.co/400x400/ffe4e1/333333?text=Rose+Matte+Lip+Color",
+    "subcategory": "lipstick"
   },
   {
     "id": 2,
     "name": "Velvet Crimson Lipstick",
     "brand": "Glow Cosmetics",
-    "category": "lipstick",
+    "category": "Makeup",
     "price": 699,
     "shade": "bright red",
     "color_family": "red",
@@ -28,16 +36,25 @@
     "finish": "matte",
     "texture": "smooth",
     "coverage": "full",
-    "skin_types": ["all"],
-    "features": ["hydrating", "vegan"],
-    "key_ingredients": ["Jojoba Oil", "Vitamin E"],
-    "image": "https://placehold.co/400x400/ffb6c1/333333?text=Velvet+Crimson"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "hydrating",
+      "vegan"
+    ],
+    "key_ingredients": [
+      "Jojoba Oil",
+      "Vitamin E"
+    ],
+    "image": "https://placehold.co/400x400/ffb6c1/333333?text=Velvet+Crimson",
+    "subcategory": "lipstick"
   },
   {
     "id": 3,
     "name": "Sheer Plum Gloss",
     "brand": "Lumina",
-    "category": "lip gloss",
+    "category": "Makeup",
     "price": 350,
     "shade": "plum",
     "color_family": "purple",
@@ -45,16 +62,24 @@
     "finish": "glossy",
     "texture": "sticky",
     "coverage": "sheer",
-    "skin_types": ["all"],
-    "features": ["plumping"],
-    "key_ingredients": ["Peppermint Oil", "Hyaluronic Acid"],
-    "image": "https://placehold.co/400x400/dda0dd/333333?text=Sheer+Plum"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "plumping"
+    ],
+    "key_ingredients": [
+      "Peppermint Oil",
+      "Hyaluronic Acid"
+    ],
+    "image": "https://placehold.co/400x400/dda0dd/333333?text=Sheer+Plum",
+    "subcategory": "lip gloss"
   },
   {
     "id": 4,
     "name": "Flawless Base Foundation",
     "brand": "TrueSkin",
-    "category": "foundation",
+    "category": "Makeup",
     "price": 899,
     "shade": "beige",
     "color_family": "neutral",
@@ -62,16 +87,26 @@
     "finish": "dewy",
     "texture": "liquid",
     "coverage": "medium",
-    "skin_types": ["dry", "normal"],
-    "features": ["spf 30", "lightweight"],
-    "key_ingredients": ["Hyaluronic Acid", "Squalane"],
-    "image": "https://placehold.co/400x400/f5deb3/333333?text=Flawless+Base"
+    "skin_types": [
+      "dry",
+      "normal"
+    ],
+    "features": [
+      "spf 30",
+      "lightweight"
+    ],
+    "key_ingredients": [
+      "Hyaluronic Acid",
+      "Squalane"
+    ],
+    "image": "https://placehold.co/400x400/f5deb3/333333?text=Flawless+Base",
+    "subcategory": "foundation"
   },
   {
     "id": 5,
     "name": "Matte Perfect Foundation",
     "brand": "TrueSkin",
-    "category": "foundation",
+    "category": "Makeup",
     "price": 950,
     "shade": "tan",
     "color_family": "tan",
@@ -79,16 +114,26 @@
     "finish": "matte",
     "texture": "liquid",
     "coverage": "full",
-    "skin_types": ["oily", "combination"],
-    "features": ["oil control", "24h wear"],
-    "key_ingredients": ["Salicylic Acid (BHA)", "Niacinamide"],
-    "image": "https://placehold.co/400x400/deb887/333333?text=Matte+Perfect"
+    "skin_types": [
+      "oily",
+      "combination"
+    ],
+    "features": [
+      "oil control",
+      "24h wear"
+    ],
+    "key_ingredients": [
+      "Salicylic Acid (BHA)",
+      "Niacinamide"
+    ],
+    "image": "https://placehold.co/400x400/deb887/333333?text=Matte+Perfect",
+    "subcategory": "foundation"
   },
   {
     "id": 6,
     "name": "Peachy Glow Blush",
     "brand": "Cheeky",
-    "category": "blush",
+    "category": "Makeup",
     "price": 450,
     "shade": "peach",
     "color_family": "pink",
@@ -96,16 +141,24 @@
     "finish": "shimmer",
     "texture": "powder",
     "coverage": "buildable",
-    "skin_types": ["all"],
-    "features": ["cruelty-free"],
-    "key_ingredients": ["Mica", "Vitamin E"],
-    "image": "https://placehold.co/400x400/ffdab9/333333?text=Peachy+Glow"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "cruelty-free"
+    ],
+    "key_ingredients": [
+      "Mica",
+      "Vitamin E"
+    ],
+    "image": "https://placehold.co/400x400/ffdab9/333333?text=Peachy+Glow",
+    "subcategory": "blush"
   },
   {
     "id": 7,
     "name": "Volumizing Mascara",
     "brand": "EyeMax",
-    "category": "mascara",
+    "category": "Makeup",
     "price": 399,
     "shade": "black",
     "color_family": "black",
@@ -113,16 +166,25 @@
     "finish": "matte",
     "texture": "creamy",
     "coverage": "full",
-    "skin_types": ["all"],
-    "features": ["waterproof", "lengthening"],
-    "key_ingredients": ["Panthenol", "Beeswax"],
-    "image": "https://placehold.co/400x400/2f4f4f/ffffff?text=Volumizing+Mascara"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "waterproof",
+      "lengthening"
+    ],
+    "key_ingredients": [
+      "Panthenol",
+      "Beeswax"
+    ],
+    "image": "https://placehold.co/400x400/2f4f4f/ffffff?text=Volumizing+Mascara",
+    "subcategory": "mascara"
   },
   {
     "id": 8,
     "name": "Precision Liquid Eyeliner",
     "brand": "EyeMax",
-    "category": "eyeliner",
+    "category": "Makeup",
     "price": 299,
     "shade": "carbon black",
     "color_family": "black",
@@ -130,16 +192,24 @@
     "finish": "matte",
     "texture": "liquid",
     "coverage": "opaque",
-    "skin_types": ["all"],
-    "features": ["smudge-proof"],
-    "key_ingredients": ["Vitamin E", "Carbon Black"],
-    "image": "https://placehold.co/400x400/000000/ffffff?text=Precision+Eyeliner"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "smudge-proof"
+    ],
+    "key_ingredients": [
+      "Vitamin E",
+      "Carbon Black"
+    ],
+    "image": "https://placehold.co/400x400/000000/ffffff?text=Precision+Eyeliner",
+    "subcategory": "eyeliner"
   },
   {
     "id": 9,
     "name": "Hydration Boost Serum",
     "brand": "SkinPure",
-    "category": "serum",
+    "category": "Skincare",
     "price": 1200,
     "shade": "clear",
     "color_family": "clear",
@@ -147,16 +217,26 @@
     "finish": "natural",
     "texture": "gel",
     "coverage": "sheer",
-    "skin_types": ["dry", "sensitive"],
-    "features": ["hyaluronic acid", "fragrance-free"],
-    "key_ingredients": ["Hyaluronic Acid", "Ceramides"],
-    "image": "https://placehold.co/400x400/e0ffff/333333?text=Hydration+Serum"
+    "skin_types": [
+      "dry",
+      "sensitive"
+    ],
+    "features": [
+      "hyaluronic acid",
+      "fragrance-free"
+    ],
+    "key_ingredients": [
+      "Hyaluronic Acid",
+      "Ceramides"
+    ],
+    "image": "https://placehold.co/400x400/e0ffff/333333?text=Hydration+Serum",
+    "subcategory": "serum"
   },
   {
     "id": 10,
     "name": "Daily Defense Sunscreen",
     "brand": "SunGuard",
-    "category": "sunscreen",
+    "category": "Skincare",
     "price": 650,
     "shade": "white",
     "color_family": "white",
@@ -164,16 +244,25 @@
     "finish": "invisible",
     "texture": "lotion",
     "coverage": "sheer",
-    "skin_types": ["all"],
-    "features": ["spf 50", "no white cast"],
-    "key_ingredients": ["Zinc Oxide", "Niacinamide"],
-    "image": "https://placehold.co/400x400/fffacd/333333?text=Daily+Defense+SPF"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "spf 50",
+      "no white cast"
+    ],
+    "key_ingredients": [
+      "Zinc Oxide",
+      "Niacinamide"
+    ],
+    "image": "https://placehold.co/400x400/fffacd/333333?text=Daily+Defense+SPF",
+    "subcategory": "sunscreen"
   },
   {
     "id": 11,
     "name": "Nude Petal Matte Lipstick",
     "brand": "Aura Luxe",
-    "category": "lipstick",
+    "category": "Makeup",
     "price": 549,
     "shade": "Pillow Talk Nude",
     "color_family": "pink",
@@ -181,16 +270,27 @@
     "finish": "matte",
     "texture": "creamy",
     "coverage": "medium",
-    "skin_types": ["all"],
-    "features": ["hydrating", "long lasting", "cashmere feel"],
-    "key_ingredients": ["Shea Butter", "Vitamin E", "Jojoba Oil"],
-    "image": "https://placehold.co/400x400/f4c2c2/333333?text=Nude+Petal+Matte"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "hydrating",
+      "long lasting",
+      "cashmere feel"
+    ],
+    "key_ingredients": [
+      "Shea Butter",
+      "Vitamin E",
+      "Jojoba Oil"
+    ],
+    "image": "https://placehold.co/400x400/f4c2c2/333333?text=Nude+Petal+Matte",
+    "subcategory": "lipstick"
   },
   {
     "id": 12,
     "name": "Dusty Rose Velvet Lip Crayon",
     "brand": "Mavie Botanicals",
-    "category": "lipstick",
+    "category": "Makeup",
     "price": 420,
     "shade": "nude pink",
     "color_family": "pink",
@@ -198,16 +298,27 @@
     "finish": "matte",
     "texture": "creamy",
     "coverage": "full",
-    "skin_types": ["all"],
-    "features": ["nourishing", "cruelty-free", "comfort-wear"],
-    "key_ingredients": ["Shea Butter", "Beeswax", "Vitamin E"],
-    "image": "https://placehold.co/400x400/e8b4b8/333333?text=Dusty+Rose+Crayon"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "nourishing",
+      "cruelty-free",
+      "comfort-wear"
+    ],
+    "key_ingredients": [
+      "Shea Butter",
+      "Beeswax",
+      "Vitamin E"
+    ],
+    "image": "https://placehold.co/400x400/e8b4b8/333333?text=Dusty+Rose+Crayon",
+    "subcategory": "lipstick"
   },
   {
     "id": 13,
     "name": "Satin Touch Mauve Lipstick",
     "brand": "Velvet Touch",
-    "category": "lipstick",
+    "category": "Makeup",
     "price": 480,
     "shade": "soft mauve",
     "color_family": "pink",
@@ -215,16 +326,26 @@
     "finish": "satin",
     "texture": "creamy",
     "coverage": "medium",
-    "skin_types": ["all"],
-    "features": ["antioxidant rich", "hydrating"],
-    "key_ingredients": ["Jojoba Oil", "Vitamin E", "Hyaluronic Acid"],
-    "image": "https://placehold.co/400x400/d8a1a8/333333?text=Satin+Touch+Mauve"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "antioxidant rich",
+      "hydrating"
+    ],
+    "key_ingredients": [
+      "Jojoba Oil",
+      "Vitamin E",
+      "Hyaluronic Acid"
+    ],
+    "image": "https://placehold.co/400x400/d8a1a8/333333?text=Satin+Touch+Mauve",
+    "subcategory": "lipstick"
   },
   {
     "id": 14,
     "name": "Bare Bliss Hydrating Lip Oil",
     "brand": "DewLab",
-    "category": "lip gloss",
+    "category": "Makeup",
     "price": 399,
     "shade": "sheer pink",
     "color_family": "pink",
@@ -232,16 +353,27 @@
     "finish": "glossy",
     "texture": "smooth",
     "coverage": "sheer",
-    "skin_types": ["all"],
-    "features": ["non-sticky", "cushiony", "mirror shine"],
-    "key_ingredients": ["Jojoba Oil", "Vitamin E", "Shea Butter"],
-    "image": "https://placehold.co/400x400/fde2e4/333333?text=Bare+Bliss+Lip+Oil"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "non-sticky",
+      "cushiony",
+      "mirror shine"
+    ],
+    "key_ingredients": [
+      "Jojoba Oil",
+      "Vitamin E",
+      "Shea Butter"
+    ],
+    "image": "https://placehold.co/400x400/fde2e4/333333?text=Bare+Bliss+Lip+Oil",
+    "subcategory": "lip gloss"
   },
   {
     "id": 15,
     "name": "Glaze Bomb High-Shine Gloss",
     "brand": "Glow Rituals",
-    "category": "lip gloss",
+    "category": "Makeup",
     "price": 450,
     "shade": "sparkling nude rose",
     "color_family": "pink",
@@ -249,16 +381,27 @@
     "finish": "glossy",
     "texture": "creamy",
     "coverage": "sheer",
-    "skin_types": ["all"],
-    "features": ["plumping", "vanilla scent", "nourishing"],
-    "key_ingredients": ["Shea Butter", "Hyaluronic Acid", "Peppermint Oil"],
-    "image": "https://placehold.co/400x400/ffdfd3/333333?text=Glaze+Bomb+Gloss"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "plumping",
+      "vanilla scent",
+      "nourishing"
+    ],
+    "key_ingredients": [
+      "Shea Butter",
+      "Hyaluronic Acid",
+      "Peppermint Oil"
+    ],
+    "image": "https://placehold.co/400x400/ffdfd3/333333?text=Glaze+Bomb+Gloss",
+    "subcategory": "lip gloss"
   },
   {
     "id": 16,
     "name": "Stay-All-Day Stay Matte Foundation",
     "brand": "ProCover",
-    "category": "foundation",
+    "category": "Makeup",
     "price": 799,
     "shade": "warm beige",
     "color_family": "neutral",
@@ -266,16 +409,28 @@
     "finish": "matte",
     "texture": "liquid",
     "coverage": "full",
-    "skin_types": ["oily", "combination"],
-    "features": ["transfer-proof", "24h wear", "oil control"],
-    "key_ingredients": ["Niacinamide", "Salicylic Acid (BHA)", "Dimethicone"],
-    "image": "https://placehold.co/400x400/eddcd2/333333?text=Stay+Matte+Base"
+    "skin_types": [
+      "oily",
+      "combination"
+    ],
+    "features": [
+      "transfer-proof",
+      "24h wear",
+      "oil control"
+    ],
+    "key_ingredients": [
+      "Niacinamide",
+      "Salicylic Acid (BHA)",
+      "Dimethicone"
+    ],
+    "image": "https://placehold.co/400x400/eddcd2/333333?text=Stay+Matte+Base",
+    "subcategory": "foundation"
   },
   {
     "id": 17,
     "name": "Radiant Silk Luminous Foundation",
-    "brand": "Lumière",
-    "category": "foundation",
+    "brand": "Lumi\u00e8re",
+    "category": "Makeup",
     "price": 850,
     "shade": "neutral sand",
     "color_family": "neutral",
@@ -283,16 +438,28 @@
     "finish": "dewy",
     "texture": "liquid",
     "coverage": "medium",
-    "skin_types": ["dry", "normal"],
-    "features": ["second-skin glow", "hydrating", "breathable"],
-    "key_ingredients": ["Squalane", "Hyaluronic Acid", "Vitamin E"],
-    "image": "https://placehold.co/400x400/ddb892/333333?text=Radiant+Silk+Base"
+    "skin_types": [
+      "dry",
+      "normal"
+    ],
+    "features": [
+      "second-skin glow",
+      "hydrating",
+      "breathable"
+    ],
+    "key_ingredients": [
+      "Squalane",
+      "Hyaluronic Acid",
+      "Vitamin E"
+    ],
+    "image": "https://placehold.co/400x400/ddb892/333333?text=Radiant+Silk+Base",
+    "subcategory": "foundation"
   },
   {
     "id": 18,
     "name": "Skin-First Tinted Glow Serum",
     "brand": "TrueSkin",
-    "category": "foundation",
+    "category": "Makeup",
     "price": 699,
     "shade": "light medium",
     "color_family": "neutral",
@@ -300,16 +467,27 @@
     "finish": "natural",
     "texture": "liquid",
     "coverage": "sheer",
-    "skin_types": ["all"],
-    "features": ["spf 20", "skin-barrier support", "clean"],
-    "key_ingredients": ["Ceramides", "Hyaluronic Acid", "Squalane"],
-    "image": "https://placehold.co/400x400/b08968/333333?text=Tinted+Glow+Serum"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "spf 20",
+      "skin-barrier support",
+      "clean"
+    ],
+    "key_ingredients": [
+      "Ceramides",
+      "Hyaluronic Acid",
+      "Squalane"
+    ],
+    "image": "https://placehold.co/400x400/b08968/333333?text=Tinted+Glow+Serum",
+    "subcategory": "foundation"
   },
   {
     "id": 19,
     "name": "Radiant Coral Shimmer Blush",
     "brand": "Cheeky",
-    "category": "blush",
+    "category": "Makeup",
     "price": 499,
     "shade": "peachy pink with gold shimmer",
     "color_family": "pink",
@@ -317,16 +495,27 @@
     "finish": "shimmer",
     "texture": "powder",
     "coverage": "buildable",
-    "skin_types": ["all"],
-    "features": ["golden reflex", "radiant flush", "long lasting"],
-    "key_ingredients": ["Mica", "Vitamin E", "Dimethicone"],
-    "image": "https://placehold.co/400x400/f3c68f/333333?text=Radiant+Coral+Blush"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "golden reflex",
+      "radiant flush",
+      "long lasting"
+    ],
+    "key_ingredients": [
+      "Mica",
+      "Vitamin E",
+      "Dimethicone"
+    ],
+    "image": "https://placehold.co/400x400/f3c68f/333333?text=Radiant+Coral+Blush",
+    "subcategory": "blush"
   },
   {
     "id": 20,
     "name": "Pore-Clearing BHA Clarifying Serum",
     "brand": "DermaPure",
-    "category": "serum",
+    "category": "Skincare",
     "price": 599,
     "shade": "clear",
     "color_family": "clear",
@@ -334,16 +523,29 @@
     "finish": "natural",
     "texture": "liquid",
     "coverage": "sheer",
-    "skin_types": ["oily", "combination", "acne-prone"],
-    "features": ["exfoliating", "pore minimizing", "calming"],
-    "key_ingredients": ["Salicylic Acid (BHA)", "Niacinamide", "Centella Asiatica"],
-    "image": "https://placehold.co/400x400/d8e2dc/333333?text=BHA+Clarifying+Serum"
+    "skin_types": [
+      "oily",
+      "combination",
+      "acne-prone"
+    ],
+    "features": [
+      "exfoliating",
+      "pore minimizing",
+      "calming"
+    ],
+    "key_ingredients": [
+      "Salicylic Acid (BHA)",
+      "Niacinamide",
+      "Centella Asiatica"
+    ],
+    "image": "https://placehold.co/400x400/d8e2dc/333333?text=BHA+Clarifying+Serum",
+    "subcategory": "serum"
   },
   {
     "id": 21,
     "name": "10% Niacinamide + Zinc Balance Drops",
     "brand": "SkinPure",
-    "category": "serum",
+    "category": "Skincare",
     "price": 550,
     "shade": "clear",
     "color_family": "clear",
@@ -351,16 +553,28 @@
     "finish": "natural",
     "texture": "gel",
     "coverage": "sheer",
-    "skin_types": ["all", "oily"],
-    "features": ["blemish control", "sebum balance", "brightening"],
-    "key_ingredients": ["Niacinamide", "Hyaluronic Acid", "Panthenol"],
-    "image": "https://placehold.co/400x400/ffe5d9/333333?text=Niacinamide+Drops"
+    "skin_types": [
+      "all",
+      "oily"
+    ],
+    "features": [
+      "blemish control",
+      "sebum balance",
+      "brightening"
+    ],
+    "key_ingredients": [
+      "Niacinamide",
+      "Hyaluronic Acid",
+      "Panthenol"
+    ],
+    "image": "https://placehold.co/400x400/ffe5d9/333333?text=Niacinamide+Drops",
+    "subcategory": "serum"
   },
   {
     "id": 22,
     "name": "15% Vitamin C Glow Brightening Booster",
     "brand": "Lumina Skincare",
-    "category": "serum",
+    "category": "Skincare",
     "price": 899,
     "shade": "clear",
     "color_family": "clear",
@@ -368,16 +582,27 @@
     "finish": "dewy",
     "texture": "liquid",
     "coverage": "sheer",
-    "skin_types": ["all"],
-    "features": ["dark spot fading", "antioxidant boost", "radiance"],
-    "key_ingredients": ["Vitamin C", "Vitamin E", "Hyaluronic Acid"],
-    "image": "https://placehold.co/400x400/ffd166/333333?text=Vitamin+C+Glow"
+    "skin_types": [
+      "all"
+    ],
+    "features": [
+      "dark spot fading",
+      "antioxidant boost",
+      "radiance"
+    ],
+    "key_ingredients": [
+      "Vitamin C",
+      "Vitamin E",
+      "Hyaluronic Acid"
+    ],
+    "image": "https://placehold.co/400x400/ffd166/333333?text=Vitamin+C+Glow",
+    "subcategory": "serum"
   },
   {
     "id": 23,
     "name": "Multi-Peptide Youth Plumping Serum",
     "brand": "AgeLess Bio",
-    "category": "serum",
+    "category": "Skincare",
     "price": 999,
     "shade": "clear",
     "color_family": "clear",
@@ -385,16 +610,29 @@
     "finish": "natural",
     "texture": "gel",
     "coverage": "sheer",
-    "skin_types": ["all", "mature", "dry"],
-    "features": ["firming", "elasticity boost", "smoothing"],
-    "key_ingredients": ["Peptides", "Hyaluronic Acid", "Ceramides"],
-    "image": "https://placehold.co/400x400/c7f9cc/333333?text=Peptide+Plump+Serum"
+    "skin_types": [
+      "all",
+      "mature",
+      "dry"
+    ],
+    "features": [
+      "firming",
+      "elasticity boost",
+      "smoothing"
+    ],
+    "key_ingredients": [
+      "Peptides",
+      "Hyaluronic Acid",
+      "Ceramides"
+    ],
+    "image": "https://placehold.co/400x400/c7f9cc/333333?text=Peptide+Plump+Serum",
+    "subcategory": "serum"
   },
   {
     "id": 24,
     "name": "Centella Barrier Relief Cream",
     "brand": "K-Derma",
-    "category": "skincare",
+    "category": "Skincare",
     "price": 650,
     "shade": "white",
     "color_family": "white",
@@ -402,16 +640,28 @@
     "finish": "natural",
     "texture": "cream",
     "coverage": "sheer",
-    "skin_types": ["sensitive", "dry"],
-    "features": ["redness soothing", "barrier repair", "fragrance-free"],
-    "key_ingredients": ["Centella Asiatica", "Ceramides", "Squalane"],
-    "image": "https://placehold.co/400x400/80ed99/333333?text=Centella+Barrier+Cream"
+    "skin_types": [
+      "sensitive",
+      "dry"
+    ],
+    "features": [
+      "redness soothing",
+      "barrier repair",
+      "fragrance-free"
+    ],
+    "key_ingredients": [
+      "Centella Asiatica",
+      "Ceramides",
+      "Squalane"
+    ],
+    "image": "https://placehold.co/400x400/80ed99/333333?text=Centella+Barrier+Cream",
+    "subcategory": "skincare"
   },
   {
     "id": 25,
     "name": "Invisible Shield Matte Sunscreen SPF 50",
     "brand": "SunGuard",
-    "category": "sunscreen",
+    "category": "Skincare",
     "price": 699,
     "shade": "clear",
     "color_family": "clear",
@@ -419,9 +669,42 @@
     "finish": "matte",
     "texture": "gel",
     "coverage": "invisible",
-    "skin_types": ["all", "oily"],
-    "features": ["no white cast", "primer finish", "water-resistant"],
-    "key_ingredients": ["Dimethicone", "Vitamin E", "Niacinamide"],
-    "image": "https://placehold.co/400x400/57cc99/333333?text=Invisible+Shield+SPF"
+    "skin_types": [
+      "all",
+      "oily"
+    ],
+    "features": [
+      "no white cast",
+      "primer finish",
+      "water-resistant"
+    ],
+    "key_ingredients": [
+      "Dimethicone",
+      "Vitamin E",
+      "Niacinamide"
+    ],
+    "image": "https://placehold.co/400x400/57cc99/333333?text=Invisible+Shield+SPF",
+    "subcategory": "sunscreen"
+  },
+  {
+    "id": 999,
+    "name": "La Prairie Skin Caviar Concealer Foundation",
+    "brand": "La Prairie",
+    "category": "Makeup",
+    "subcategory": "Foundation",
+    "price": 15000,
+    "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&h=500&fit=crop",
+    "features": [
+      "Anti-Aging",
+      "Firming",
+      "Hydrating"
+    ],
+    "key_ingredients": [
+      "Caviar Extract",
+      "Peptides",
+      "Vitamin E"
+    ],
+    "finish": "Radiant",
+    "texture": "Cream"
   }
 ]

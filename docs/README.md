@@ -1,45 +1,93 @@
-# Joyory AI LookMatch
+﻿# Joyory AI LookMatch — Documentation Hub
 
-Welcome to the documentation for **Joyory AI LookMatch**, an AI-powered beauty match application. This project leverages generative AI to analyze text descriptions or images of makeup/beauty products and matches them with available products in a catalog based on specific attributes like color, tone, finish, and skin type.
+Welcome to the official documentation for **Joyory AI LookMatch**, an AI-powered beauty discovery platform.
 
-## Architecture
+---
 
-The project follows a modern decoupled architecture, consisting of two main parts:
+## What Is Joyory AI LookMatch?
 
-- **Frontend**: A single-page React application built with **Vite**, **TypeScript**, and **Tailwind CSS**. It provides a dynamic, responsive UI for users to select features or describe their desired look using natural language.
-- **Backend**: A RESTful **FastAPI** Python application that serves the core API, processes matches using algorithmic scoring, and integrates with the **Google Gemini AI API** for natural language understanding and image analysis.
+Joyory AI LookMatch helps users find affordable alternatives to high-end beauty products. A user can:
+
+- **Type** the name of a luxury product (e.g., *"Charlotte Tilbury Flawless Filter"*)
+- **Speak** their request using the built-in voice interface
+- **Upload** a product image for AI-powered visual analysis
+
+The system uses **Google Gemini AI** to extract structured beauty attributes (category, shade, finish, ingredients, etc.) and then runs a weighted scoring algorithm against a curated product catalog to return the **top 5 closest matches** — with explainable reasons for each result.
+
+---
+
+## High-Level Architecture
+
+```
+┌──────────────────────────────────────────────────┐
+│                   Browser / Client                │
+│  React 19 + TypeScript + Vite + TailwindCSS 4    │
+│                                                  │
+│  ┌─────────────┐  ┌────────────────────────────┐ │
+│  │  Home Page  │  │    AI LookMatch Chat Page   │ │
+│  │  (catalog)  │  │  (text / voice / image)    │ │
+│  └─────────────┘  └────────────────────────────┘ │
+└────────────────────────┬─────────────────────────┘
+                         │ HTTP (Vite proxy → :8000)
+┌────────────────────────▼─────────────────────────┐
+│              FastAPI Backend (:8000)              │
+│                                                  │
+│  /api/products   →  Product catalog CRUD         │
+│  /api/ai/status  →  Gemini key health check      │
+│  /api/ai/product-name  →  Text → AIAttributes    │
+│  /api/ai/image   →  Image → AIAttributes         │
+│  /api/ai/lookmatch-text  →  Text → MatchResponse │
+│  /api/match      →  AIAttributes → MatchResponse │
+│                                                  │
+│  ┌─────────────────┐  ┌─────────────────────┐   │
+│  │  ai_service.py  │  │ matching_service.py  │   │
+│  │  (Gemini calls) │  │  (scoring engine)   │   │
+│  └────────┬────────┘  └─────────────────────┘   │
+│           │                                      │
+│  ┌────────▼────────────────────────────────┐     │
+│  │  Google Gemini API (external)           │     │
+│  └─────────────────────────────────────────┘     │
+└──────────────────────────────────────────────────┘
+```
+
+---
+
+## Documentation Index
+
+| File | Audience | Contents |
+|---|---|---|
+| [SETUP_GUIDE.md](SETUP_GUIDE.md) | All developers | Environment setup, dependencies, running locally |
+| [API_REFERENCE.md](API_REFERENCE.md) | Backend developers, API consumers | All endpoints, schemas, request/response examples |
+| [FRONTEND_ARCHITECTURE.md](FRONTEND_ARCHITECTURE.md) | Frontend developers | Component tree, routing, state management, styling |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contributors | Branching strategy, code style, PR process |
+
+---
 
 ## Core Features
 
-- **Describe Your Look**: Users can type a natural language description (e.g., _"I want a matte red lipstick that lasts all day"_). The frontend sends this to the backend, where Gemini extracts structured beauty attributes (color family, finish, etc.), and the backend finds the best products.
-- **Quick Select (Chips)**: Users can select desired features (e.g., _"vegan"_, _"hydrating"_, _"spf 50"_) from a pre-defined list to instantly filter and match products based on exact feature overlap.
-- **Image Analysis**: Users can upload an image, and the AI will extract the relevant beauty attributes (like shade and undertone) to find similar products.
-- **Explainable AI Matching**: The matching algorithm doesn't just return products; it returns a `MatchResult` that includes the specific `reasons` why a product matched the user's query, which is displayed on the product cards.
+### 🤖 AI Attribute Extraction
+`ai_service.py` sends structured prompts to Gemini Flash to extract up to 14 beauty attributes from free-form text or product images. Attributes include category, shade, undertone, finish, texture, coverage, features, and key ingredients.
 
-## Project Structure
+### ⚖️ Weighted Scoring Engine
+`matching_service.py` scores every catalog product against the extracted `AIAttributes` using configurable weights per attribute. Ingredient matching uses a synonym dictionary to normalize INCI names (e.g., `sodium hyaluronate` → `Hyaluronic Acid`).
 
-```
-Joyory-AI-LookMatch/
-├── backend/
-│   ├── app/
-│   │   ├── api/          # FastAPI routers (products.py, ai.py, matching.py)
-│   │   ├── schemas/      # Pydantic models (product.py, matching.py)
-│   │   ├── services/     # Core business logic and AI integration
-│   │   └── data/         # JSON database for the MVP (products.json)
-│   ├── main.py           # FastAPI application entry point
-│   └── requirements.txt  # Python dependencies
-├── frontend/
-│   ├── src/
-│   │   ├── App.tsx       # Monolithic React component containing all UI
-│   │   ├── main.tsx      # React entry point
-│   │   └── index.css     # Tailwind CSS styles
-│   ├── package.json      # Node dependencies
-│   └── vite.config.ts    # Vite bundler configuration (includes API proxy)
-└── docs/                 # Project documentation
-```
+### 💬 Conversational Chat UI
+`AILookMatchPage.tsx` implements a full chat interface with:
+- Auto-scrolling message history
+- Voice input via Web Speech API
+- Image upload with validation (max 5 MB, JPG/PNG/WEBP)
+- Per-message product result cards with match scores & reasons
 
-## Documentation Structure
+### 🛍️ Product Catalog
+Products are stored in `backend/app/data/products.json`. Each product entry supports all `AIAttributes` fields plus `brand`, `price`, `originalPrice`, `skin_types`, and `image`.
 
-- [Setup Guide](SETUP_GUIDE.md) - Instructions to get the project running locally.
-- [API Reference](API_REFERENCE.md) - Detailed schemas and endpoint documentation for the backend REST API.
-- [Frontend Architecture](FRONTEND_ARCHITECTURE.md) - Deep dive into the React components and state management.
+---
+
+## Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `GEMINI_API_KEY` | ✅ Yes | Google Gemini API key (primary lookup) |
+| `AI_API_KEY` | Optional | Fallback alias for `GEMINI_API_KEY` |
+
+> Get a free key at https://aistudio.google.com/app/apikey
