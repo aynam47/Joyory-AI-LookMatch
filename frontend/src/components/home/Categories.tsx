@@ -11,7 +11,7 @@ export function Categories() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
           {CATEGORIES.map(cat => (
             <div key={cat.name} className="group cursor-pointer relative overflow-hidden rounded-2xl aspect-[4/5] md:aspect-[3/4] bg-[#f7e8e8]">
               <img src={cat.image} alt={cat.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />

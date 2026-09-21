@@ -18,3 +18,8 @@ export interface Product {
   savings_percentage?: number
   image: string
 }
+
+export interface CartItem {
+  product: Product
+  quantity: number
+}

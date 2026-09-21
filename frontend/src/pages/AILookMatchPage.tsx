@@ -348,11 +348,14 @@ export default function AILookMatchPage({ onAddToCart }: { onAddToCart: (id: num
               <button
                 onClick={handleSendText}
                 disabled={!input.trim() || loading}
-                className="p-4 bg-[#c9707a] text-white rounded-full hover:bg-[#b85f6a] hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:cursor-not-allowed flex-shrink-0"
+                className="relative p-4 bg-gradient-to-r from-[#c9707a] to-[#d4af37] text-white rounded-full transition-all group overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 border border-transparent shadow-[0_4px_14px_0_rgba(201,112,122,0.39)] hover:shadow-[0_6px_20px_rgba(201,112,122,0.23),0_4px_10px_rgba(212,175,55,0.4)] disabled:shadow-none hover:-translate-y-0.5 disabled:hover:translate-y-0"
                 title="Send"
               >
-                <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                {/* Glow effect behind the icon */}
+                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-full" />
+                
+                <svg className="w-5 h-5 ml-0.5 relative z-10 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
