@@ -5,13 +5,13 @@
   --font-display: 'Playfair Display', serif;
   --font-body: 'Outfit', sans-serif;
 
-  --color-blush: #f7e8e8;
-  --color-rose: #c9707a;
-  --color-rose-deep: #a84f59;
-  --color-gold: #c9a96e;
-  --color-cream: #fdf8f4;
-  --color-charcoal: #2c2225;
-  --color-muted: #9a8287;
+  --color-blush: #fcedec;
+  --color-rose: #d47f8a;
+  --color-rose-deep: #b85f6a;
+  --color-gold: #d4af37;
+  --color-cream: #faf7f5;
+  --color-charcoal: #241c1e;
+  --color-muted: #8c7b7e;
 }
 
 * {
@@ -20,27 +20,36 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-color: var(--color-rose) var(--color-blush);
+  overflow-x: hidden;
 }
 
 body {
   font-family: var(--font-body);
   background-color: var(--color-cream);
   color: var(--color-charcoal);
+  /* A very soft ambient gradient for the whole page */
+  background-image: radial-gradient(circle at top right, rgba(252, 237, 236, 0.7), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.05), transparent 40%);
+  background-attachment: fixed;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
 }
 
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #e0c8c8;
-  border-radius: 2px;
+/* Legacy fallback for WebKit scrollbars (progressive enhancement) */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-rose);
+    border-radius: 3px;
+  }
 }
 
 .line-clamp-2 {

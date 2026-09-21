@@ -6,7 +6,9 @@ class Product(BaseModel):
     name: str
     brand: str
     category: str
+    subcategory: Optional[str] = None
     price: float
+    originalPrice: Optional[float] = None
     shade: Optional[str] = None
     color_family: Optional[str] = None
     undertone: Optional[str] = None

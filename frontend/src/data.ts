@@ -43,6 +43,29 @@ function getRandomItems<T>(arr: T[], min: number, max: number): T[] {
   return shuffled.slice(0, count);
 }
 
+const PRODUCT_NAMES: Record<string, string[]> = {
+  'Skincare': [
+    'Hydrating Cleanser', 'Vitamin C Brightening Serum', 'Daily Defense SPF 50', 
+    'Night Repair Cream', 'Rosewater Soothing Toner', 'Gentle Exfoliating Scrub', 
+    'Hyaluronic Acid Gel', 'Peptide Eye Cream', 'Clay Detox Mask', 'Squalane Face Oil'
+  ],
+  'Makeup': [
+    'Velvet Matte Lipstick', 'Luminous Liquid Foundation', 'Max Volume Mascara', 
+    'Radiant Peach Blush', 'Precision Ink Eyeliner', 'Flawless Setting Spray', 
+    'Dewy Skin Primer', 'Satin Finish Lip Gloss', 'Contour & Highlight Palette', 'Brow Sculpting Gel'
+  ],
+  'Haircare': [
+    'Nourishing Argan Shampoo', 'Deep Repair Conditioner', 'Intense Moisture Hair Mask', 
+    'Heat Protectant Spray', 'Volumizing Root Mousse', 'Scalp Revitalizing Serum', 
+    'Leave-in Detangler', 'Dry Shampoo Mist', 'Smoothing Hair Oil', 'Color Protect Shampoo'
+  ],
+  'Fragrance': [
+    'Rose & Oud Eau de Parfum', 'Vanilla Bourbon Scent', 'Ocean Breeze Cologne', 
+    'Midnight Bloom Perfume', 'Citrus Splash EDT', 'Amber Wood Essence', 
+    'Jasmine & Lily Perfume', 'Sandalwood Musk', 'Wild Fig & Cassis', 'Bergamot Bloom'
+  ]
+};
+
 function generateProducts(category: string, count: number, startId: number): Product[] {
   const products: Product[] = [];
   const basePrice = category === 'Fragrance' ? 2500 : category === 'Skincare' ? 800 : 500;
@@ -59,9 +82,12 @@ function generateProducts(category: string, count: number, startId: number): Pro
     else if (cat === 'Haircare') image = 'https://images.unsplash.com/photo-1526685412586-ce6e71911961?w=500&h=500&fit=crop&auto=format';
     else if (cat === 'Fragrance') image = 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=500&h=500&fit=crop&auto=format';
 
+    const namesList = PRODUCT_NAMES[cat] || PRODUCT_NAMES['Skincare'];
+    const randomName = namesList[getRandomInt(0, namesList.length - 1)];
+
     products.push({
       id: startId + i,
-      name: `${cat} Essential ${i + 1}`,
+      name: randomName,
       brand: BRANDS[getRandomInt(0, BRANDS.length - 1)],
       category: cat,
       price: price,
@@ -73,10 +99,6 @@ function generateProducts(category: string, count: number, startId: number): Pro
   return products;
 }
 
-export const ALL_PRODUCTS: Product[] = [
-  ...generateProducts('Skincare', 25, 100),
-  ...generateProducts('Makeup', 25, 200),
-  ...generateProducts('Haircare', 25, 300),
-  ...generateProducts('Fragrance', 25, 400),
-  ...generateProducts('Offers', 25, 500)
-];
+import productsData from '../../backend/app/data/products.json';
+
+export const ALL_PRODUCTS: Product[] = productsData as Product[];

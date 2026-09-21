@@ -364,14 +364,12 @@ def extract_attributes_from_text(text: str, api_key: Optional[str] = None) -> di
 
     {available_context}
     """
-
     try:
         response = _call_gemini_with_fallback(client, prompt, ExtractAttributesOutput)
         return json.loads(response.text)
     except Exception as e:
         logger.warning(f"All Gemini models were unavailable ({e}). Using intelligent catalog fallback.")
         return _fallback_rule_based_extract(text)
-
 
 def extract_attributes_from_image(image_bytes: bytes, mime_type: str, api_key: Optional[str] = None) -> dict:
     client = get_client(api_key=api_key)
@@ -391,7 +389,6 @@ def extract_attributes_from_image(image_bytes: bytes, mime_type: str, api_key: O
 
     {available_context}
     """
-
     contents = [
         types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
         prompt

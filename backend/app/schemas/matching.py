@@ -31,6 +31,7 @@ class MatchResult(BaseModel):
     shade: Optional[str] = None
     finish: Optional[str] = None
     savings_percentage: Optional[float] = None
+    unmatched: List[str] = []
 
 class MatchResponse(BaseModel):
     matches: List[MatchResult]

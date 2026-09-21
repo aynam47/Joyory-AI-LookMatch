@@ -91,6 +91,21 @@ def match_products(attributes: AIAttributes, limit: int = 5) -> List[MatchResult
     all_products = load_products()
     results = []
 
+    # 1. Category Constraint (Fuzzy Hard Filter)
+    if attributes.category:
+        target_category = attributes.category.lower().strip()
+        if target_category.endswith('s'): target_category = target_category[:-1]
+        all_products = [p for p in all_products if (p.category and target_category in p.category.lower().strip()) or (p.subcategory and target_category in p.subcategory.lower().strip())]
+
+    # 2. Subcategory Constraint (Fuzzy Hard Filter)
+    if attributes.subcategory:
+        target_sub = attributes.subcategory.lower().strip()
+        if target_sub.endswith('s'): target_sub = target_sub[:-1]
+        
+        filtered_by_sub = [p for p in all_products if p.subcategory and (target_sub in p.subcategory.lower().strip() or p.subcategory.lower().strip() in target_sub)]
+        if filtered_by_sub:
+            all_products = filtered_by_sub
+
     # Normalize target query attributes
     target_category = (attributes.category or "").lower().strip()
     target_shade = (attributes.shade or "").lower().strip()
@@ -117,6 +132,7 @@ def match_products(attributes: AIAttributes, limit: int = 5) -> List[MatchResult
     for product in all_products:
         score = 0.0
         reasons = []
+        unmatched = []
         shared_ingredients = []
 
         prod_category = product.category.lower().strip()
@@ -141,60 +157,87 @@ def match_products(attributes: AIAttributes, limit: int = 5) -> List[MatchResult
                 reasons.append(f"Related formula ({product.category.title()})")
             else:
                 score += 2.0
+                unmatched.append(f"Category mismatch")
         else:
             score += 15.0
 
         # 2. INGREDIENT SIMILARITY (Max 35 pts)
-        if normalized_target_ingredients and prod_ingredients_norm:
-            common = normalized_target_ingredients.intersection(set(prod_ingredients_norm.keys()))
-            for ing in common:
-                shared_ingredients.append(ing)
-                score += 15.0
-                reasons.append(f"Shares key active: {ing}")
-            
-            # Additional boost if high proportion matches
-            if len(common) >= 2:
-                score += 10.0
-                reasons.append(f"{len(common)} key ingredients in common")
+        if normalized_target_ingredients:
+            if prod_ingredients_norm:
+                common = normalized_target_ingredients.intersection(set(prod_ingredients_norm.keys()))
+                missing = normalized_target_ingredients - set(prod_ingredients_norm.keys())
+                for ing in common:
+                    shared_ingredients.append(ing)
+                    score += 15.0
+                    reasons.append(f"Shares key active: {ing}")
+                
+                # Additional boost if high proportion matches
+                if len(common) >= 2:
+                    score += 10.0
+                    reasons.append(f"{len(common)} key ingredients in common")
+
+                for mi in missing:
+                    unmatched.append(f"Missing ingredient: {mi.title()}")
+            else:
+                unmatched.append("Missing requested ingredients")
 
         # 3. SHADE & COLOR FAMILY (Max 20 pts)
-        if target_color_family and prod_color_family:
-            if target_color_family == prod_color_family:
+        if target_color_family:
+            if prod_color_family and target_color_family == prod_color_family:
                 score += 12.0
                 reasons.append(f"Matching {prod_color_family.title()} color family")
+            else:
+                unmatched.append("Different color family")
 
-        if target_shade and prod_shade:
-            # Check partial or exact shade words
-            target_words = set(re.findall(r'\w+', target_shade))
-            prod_words = set(re.findall(r'\w+', prod_shade))
-            if target_shade in prod_shade or prod_shade in target_shade or (target_words & prod_words):
-                score += 10.0
-                reasons.append(f"Similar shade profile ({product.shade})")
+        if target_shade:
+            if prod_shade:
+                target_words = set(re.findall(r'\w+', target_shade))
+                prod_words = set(re.findall(r'\w+', prod_shade))
+                if target_shade in prod_shade or prod_shade in target_shade or (target_words & prod_words):
+                    score += 10.0
+                    reasons.append(f"Similar shade profile ({product.shade})")
+                else:
+                    unmatched.append("Different shade")
+            else:
+                unmatched.append("Different shade")
 
         # 4. UNDERTONE (Max 10 pts)
-        if target_undertone and prod_undertone:
-            if target_undertone == prod_undertone:
+        if target_undertone:
+            if prod_undertone and target_undertone == prod_undertone:
                 score += 10.0
                 reasons.append(f"Identical {prod_undertone.title()} undertone")
-            elif "neutral" in (target_undertone, prod_undertone):
+            elif prod_undertone and "neutral" in (target_undertone, prod_undertone):
                 score += 5.0
+            else:
+                unmatched.append(f"Missing undertone ({attributes.undertone})")
 
         # 5. FINISH & TEXTURE (Max 15 pts)
-        if target_finish and prod_finish:
-            if target_finish == prod_finish:
+        if target_finish:
+            if prod_finish and target_finish == prod_finish:
                 score += 12.0
                 reasons.append(f"Identical {prod_finish.title()} finish")
+            else:
+                unmatched.append(f"Missing finish ({attributes.finish})")
         
-        if target_texture and prod_texture:
-            if target_texture == prod_texture:
+        if target_texture:
+            if prod_texture and target_texture == prod_texture:
                 score += 5.0
+                reasons.append(f"Similar texture ({product.texture})")
+            else:
+                unmatched.append(f"Missing texture ({attributes.texture})")
 
         # 6. FEATURES (Max 10 pts)
-        if target_features and prod_features:
-            common_features = target_features.intersection(prod_features)
-            for feat in common_features:
-                score += 4.0
-                reasons.append(f"Feature: {feat.title()}")
+        if target_features:
+            if prod_features:
+                common_features = target_features.intersection(prod_features)
+                missing_features = target_features - prod_features
+                for feat in common_features:
+                    score += 4.0
+                    reasons.append(f"Feature: {feat.title()}")
+                for mf in missing_features:
+                    unmatched.append(f"Missing feature: {mf.title()}")
+            else:
+                unmatched.append("Missing requested features")
 
         # 7. BUDGET & SAVINGS
         savings_pct = None
@@ -206,34 +249,37 @@ def match_products(attributes: AIAttributes, limit: int = 5) -> List[MatchResult
         if attributes.budget:
             if product.price <= attributes.budget:
                 score += 5.0
-                reasons.append("Within your budget")
+                reasons.append("Within budget")
             else:
                 score -= 3.0
+                unmatched.append("Over budget")
 
         # Normalize score into a sensible 0-99 scale
         final_score = min(99.0, max(10.0, round(score, 1)))
 
-        results.append(
-            MatchResult(
-                id=product.id,
-                name=product.name,
-                brand=product.brand,
-                price=product.price,
-                image=product.image,
-                score=final_score,
-                reasons=reasons[:4],
-                shared_ingredients=shared_ingredients,
-                category=product.category,
-                shade=product.shade,
-                finish=product.finish,
-                savings_percentage=savings_pct
+        if final_score > 0:
+            results.append(
+                MatchResult(
+                    id=product.id,
+                    name=product.name,
+                    brand=product.brand,
+                    price=product.price,
+                    image=product.image,
+                    score=final_score,
+                    reasons=reasons[:4],
+                    shared_ingredients=shared_ingredients,
+                    category=product.category,
+                    shade=product.shade,
+                    finish=product.finish,
+                    savings_percentage=savings_pct,
+                    unmatched=unmatched
+                )
             )
-        )
 
     # Sort descending by match score
     results.sort(key=lambda x: x.score, reverse=True)
 
-    # Apply budget filtering if user strictly requested budget, but preserve top 5
+    # Apply budget filtering if user strictly requested budget, but preserve top limit
     if attributes.budget:
         within_budget = [r for r in results if r.price <= attributes.budget]
         if len(within_budget) >= limit:
